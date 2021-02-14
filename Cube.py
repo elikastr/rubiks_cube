@@ -16,10 +16,13 @@ def colorize(arr):
 
 
 class Cube:
-    def __init__(self, *faces, solved=False):
+    def __init__(self, faces='', solved=False):
         if solved:
             faces = np.array([np.full((3, 3), 0), np.full((3, 3), 1), np.full((3, 3), 2),
                               np.full((3, 3), 3), np.full((3, 3), 4), np.full((3, 3), 5)])
+        else:
+            faces = np.array(list(faces), dtype=int).reshape((6, 3, 3))
+
         self.cube = {'u': faces[0],
                      'l': faces[1],
                      'f': faces[2],
