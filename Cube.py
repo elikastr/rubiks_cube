@@ -29,7 +29,7 @@ class Cube:
                      'r': faces[3],
                      'd': faces[4],
                      'b': faces[5]}
-
+        
     def print(self):
         print("Up: ")
         print(colorize(self.cube['u']))
@@ -59,6 +59,11 @@ class Cube:
         self.cube['r'] = np.swapaxes(self.cube['r'], 0, 1)
         self.cube['l'] = np.swapaxes(self.cube['l'], 0, 1)
 
+    def Fi(self):
+        self.F()
+        self.F()
+        self.F()
+
     def B(self):
         self.cube['b'] = np.rot90(self.cube['b'], 3)
 
@@ -73,6 +78,11 @@ class Cube:
 
         self.cube['r'] = np.swapaxes(self.cube['r'], 0, 1)
         self.cube['l'] = np.swapaxes(self.cube['l'], 0, 1)
+
+    def Bi(self):
+        self.B()
+        self.B()
+        self.B()
 
     def R(self):
         self.cube['r'] = np.rot90(self.cube['r'], 3)
@@ -93,6 +103,11 @@ class Cube:
         self.cube['f'] = np.swapaxes(self.cube['f'], 0, 1)
         self.cube['b'] = np.swapaxes(self.cube['b'], 0, 1)
 
+    def Ri(self):
+        self.R()
+        self.R()
+        self.R()
+
     def L(self):
         self.cube['l'] = np.rot90(self.cube['l'], 3)
 
@@ -112,6 +127,11 @@ class Cube:
         self.cube['f'] = np.swapaxes(self.cube['f'], 0, 1)
         self.cube['b'] = np.swapaxes(self.cube['b'], 0, 1)
 
+    def Li(self):
+        self.L()
+        self.L()
+        self.L()
+
     def U(self):
         self.cube['u'] = np.rot90(self.cube['u'], 3)
 
@@ -121,6 +141,11 @@ class Cube:
         self.cube['f'][0] = self.cube['r'][0]
         self.cube['r'][0] = np.flip(temp)
 
+    def Ui(self):
+        self.U()
+        self.U()
+        self.U()
+
     def D(self):
         self.cube['d'] = np.rot90(self.cube['d'], 3)
 
@@ -129,3 +154,9 @@ class Cube:
         self.cube['l'][2] = np.flip(self.cube['b'][0])
         self.cube['b'][0] = np.flip(self.cube['r'][2])
         self.cube['r'][2] = temp
+
+    def Di(self):
+        self.D()
+        self.D()
+        self.D()
+
