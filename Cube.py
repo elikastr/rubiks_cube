@@ -55,10 +55,11 @@ class Cube:
         self.bottom_cross()
         self.bottom_corners()
         self.middle_edges()
+        self.top_cross()
 
         moves = ['U', 'L', 'F', 'R', 'D', 'B']
         for move in moves:
-            self.solution = self.solution.replace(move + ' ' + move + ' ' + move, move + 'i')
+            self.solution = self.solution.replace(move + ' ' + move + ' ' + move + ' ', move + 'i ')
             self.solution = self.solution.replace(move + ' ' + move + 'i ', '')
             self.solution = self.solution.replace(move + 'i ' + move + ' ', '')
         print(self.solution)
@@ -654,3 +655,32 @@ class Cube:
             if move:
                 self.solution += move
                 self.scramble(move)
+
+    def top_cross(self):
+        color = self.cube['u'][1, 1]
+        edges = []
+
+        while edges != [0, 1, 2, 3]:
+            if 0 in edges and 1 in edges:
+                move = 'Ui '
+            elif 2 in edges and 3 in edges:
+                move = 'U '
+            elif 1 in edges and 2 in edges:
+                move = 'U U '
+            else:
+                move = ''
+
+            move += 'F U R Ui Ri Fi '
+
+            self.solution += move
+            self.scramble(move)
+
+            edges = []
+            if self.cube['u'][0, 1] == color:
+                edges.append(0)
+            if self.cube['u'][1, 2] == color:
+                edges.append(1)
+            if self.cube['u'][2, 1] == color:
+                edges.append(2)
+            if self.cube['u'][1, 0] == color:
+                edges.append(3)
