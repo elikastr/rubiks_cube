@@ -48,14 +48,12 @@ class Cube:
         print(colorize(self.cube['b']) + '\n')
 
     def solve(self):
-        if self.solution != '':
-            print(self.solution)
-            return
-
         self.bottom_cross()
         self.bottom_corners()
         self.middle_edges()
         self.top_cross()
+        self.top_corners()
+        self.top_edges()
 
         moves = ['U', 'L', 'F', 'R', 'D', 'B']
         for move in moves:
@@ -493,57 +491,54 @@ class Cube:
 
     def bottom_corners(self):
         color = self.cube['d'][1, 1]
-        free_corners = [0, 1, 2, 3]
+        combinations = [[color, self.cube['f'][1, 1], self.cube['r'][1, 1]],
+                        [color, self.cube['l'][1, 1], self.cube['f'][1, 1]],
+                        [color, self.cube['r'][1, 1], self.cube['b'][1, 1]],
+                        [color, self.cube['b'][1, 1], self.cube['l'][1, 1]]]
 
-        if self.cube['u'][0, 0] == color or self.cube['l'][0, 0] == color or self.cube['b'][2, 0] == color:
-            free_corners.remove(0)
-        if self.cube['u'][0, 2] == color or self.cube['r'][0, 2] == color or self.cube['b'][2, 2] == color:
-            free_corners.remove(1)
-        if self.cube['u'][2, 2] == color or self.cube['r'][0, 0] == color or self.cube['f'][0, 2] == color:
-            free_corners.remove(2)
-        if self.cube['u'][0, 0] == color or self.cube['l'][0, 0] == color or self.cube['b'][2, 0] == color:
-            free_corners.remove(3)
+        if self.cube['f'][2, 2] == combinations[0][1] and self.cube['r'][2, 0] == combinations[0][2] \
+                and self.cube['d'][0, 2] == color:
+            combinations.pop(0)
+        if self.cube['f'][2, 0] == combinations[1][2] and self.cube['l'][2, 2] == combinations[1][0] \
+                and self.cube['d'][0, 0] == color:
+            combinations.pop(1)
+        if self.cube['b'][0, 2] == combinations[2][2] and self.cube['r'][2, 2] == combinations[2][1] \
+                and self.cube['d'][2, 2] == color:
+            combinations.pop(2)
+        if self.cube['b'][0, 0] == combinations[3][2] and self.cube['l'][2, 0] == combinations[3][1] \
+                and self.cube['d'][2, 0] == color:
+            combinations.pop(3)
 
-        while free_corners:
-            while self.cube['d'][0, 2] != color and self.cube['f'][2, 2] != color and self.cube['r'][2, 0] != color:
-                self.solution += 'D '
-                self.D()
-
-            if 2 in free_corners:
-                move = 'R U Ri Ui '
-                free_corners.remove(2)
-            elif 1 in free_corners:
-                move = 'U R U Ri U U '
-                free_corners.remove(1)
-            elif 3 in free_corners:
-                move = 'Ui R U Ri '
-                free_corners.remove(3)
-            else:
-                move = 'U U R U Ri U '
-                free_corners.remove(0)
-
-            if move:
-                self.solution += move
-                self.scramble(move)
-
-        move = 'R U Ri Ui '
-        for _ in range(4):
-            colors = [self.cube['u'][2, 2], self.cube['f'][0, 2], self.cube['r'][0, 0]]
-            while color not in colors:
+        for colors in combinations:
+            if self.cube['u'][2, 2] in colors and self.cube['f'][0, 2] in colors and self.cube['r'][0, 0] in colors:
+                pass
+            elif self.cube['u'][0, 2] in colors and self.cube['b'][2, 2] in colors and self.cube['r'][0, 2] in colors:
                 self.solution += 'U '
                 self.U()
-                colors = [self.cube['u'][2, 2], self.cube['f'][0, 2], self.cube['r'][0, 0]]
+            elif self.cube['u'][0, 0] in colors and self.cube['b'][2, 0] in colors and self.cube['l'][0, 0] in colors:
+                self.solution += 'U U '
+                self.U()
+                self.U()
+            elif self.cube['u'][2, 0] in colors and self.cube['f'][0, 0] in colors and self.cube['l'][0, 2] in colors:
+                self.solution += 'Ui '
+                self.Ui()
+            else:
+                while self.cube['d'][0, 2] not in colors or self.cube['f'][2, 2] not in colors \
+                        or self.cube['r'][2, 0] not in colors:
+                    self.solution += 'D '
+                    self.D()
+                self.solution += 'R U Ri Ui '
+                self.scramble('R U Ri Ui')
 
-            while self.cube['f'][2, 1] not in colors or self.cube['r'][2, 1] not in colors:
+            while self.cube['f'][2, 1] != colors[1] or self.cube['r'][2, 1] != colors[2]:
                 self.solution += 'D '
                 self.D()
 
-            while self.cube['d'][0, 2] != color or \
-                    self.cube['f'][2, 2] != self.cube['f'][2, 1] or self.cube['r'][2, 0] != self.cube['r'][2, 1]:
-                self.solution += move
-                self.scramble(move)
+            while self.cube['d'][0, 2] != color or self.cube['f'][2, 2] != colors[1] or self.cube['r'][2, 0] != colors[2]:
+                self.solution += 'R U Ri Ui '
+                self.scramble('R U Ri Ui')
 
-        while self.cube['f'][2, 1] != self.cube['f'][1, 1]:
+        while self.cube['f'][1, 1] != self.cube['f'][2, 1]:
             self.solution += 'D '
             self.D()
 
@@ -684,3 +679,87 @@ class Cube:
                 edges.append(2)
             if self.cube['u'][1, 0] == color:
                 edges.append(3)
+
+    def top_corners(self):
+        color = self.cube['u'][1, 1]
+
+        corners = 0
+        if self.cube['u'][0, 0] == color:
+            corners += 1
+        if self.cube['u'][0, 2] == color:
+            corners += 1
+        if self.cube['u'][2, 0] == color:
+            corners += 1
+        if self.cube['u'][2, 2] == color:
+            corners += 1
+
+        while corners != 4:
+            if corners == 1:
+                while self.cube['u'][2, 0] != color:
+                    self.solution += 'U '
+                    self.U()
+            elif corners == 2:
+                while self.cube['f'][0, 0] != color:
+                    self.solution += 'U '
+                    self.U()
+            elif corners == 0:
+                while self.cube['l'][0, 2] != color:
+                    self.solution += 'U '
+                    self.U()
+
+            self.solution += 'R U Ri U R U U Ri '
+            self.scramble('R U Ri U R U U Ri')
+
+            corners = 0
+            if self.cube['u'][0, 0] == color:
+                corners += 1
+            if self.cube['u'][0, 2] == color:
+                corners += 1
+            if self.cube['u'][2, 0] == color:
+                corners += 1
+            if self.cube['u'][2, 2] == color:
+                corners += 1
+
+        if self.cube['l'][0, 0] == self.cube['l'][0, 2]:
+            move = 'R U Ri Ui Ri F R R Ui Ri Ui R U Ri Fi '
+        elif self.cube['f'][0, 0] == self.cube['f'][0, 2]:
+            move = 'U R U Ri Ui Ri F R R Ui Ri Ui R U Ri Fi '
+        elif self.cube['r'][0, 0] == self.cube['r'][0, 2]:
+            move = 'U U R U Ri Ui Ri F R R Ui Ri Ui R U Ri Fi '
+        elif self.cube['b'][2, 0] == self.cube['b'][2, 2]:
+            move = 'Ui R U Ri Ui Ri F R R Ui Ri Ui R U Ri Fi '
+        else:
+            move = 'Ri U Li U U R Ui L Ri U Li U U R Ui L '
+
+        self.solution += move
+        self.scramble(move)
+
+    def top_edges(self):
+        if self.cube['b'][2, 1] != self.cube['b'][2, 0] \
+                and self.cube['l'][0, 1] != self.cube['l'][0, 0] \
+                and self.cube['f'][0, 1] != self.cube['f'][0, 0] \
+                and self.cube['r'][0, 1] != self.cube['r'][0, 0]:
+            self.solution += 'R Ui R U R U R Ui Ri Ui R R '
+            self.scramble('R Ui R U R U R Ui Ri Ui R R')
+
+        if self.cube['l'][0, 1] == self.cube['l'][0, 0]:
+            self.solution += 'U '
+            self.U()
+        elif self.cube['f'][0, 1] == self.cube['f'][0, 0]:
+            self.solution += 'U U '
+            self.U()
+            self.U()
+        elif self.cube['r'][0, 1] == self.cube['r'][0, 0]:
+            self.solution += 'Ui '
+            self.Ui()
+
+        if self.cube['f'][0, 1] == self.cube['r'][0, 0]:
+            self.solution += 'R Ui R U R U R Ui Ri Ui R R '
+            self.scramble('R Ui R U R U R Ui Ri Ui R R')
+        else:
+            self.solution += 'R R U R U Ri Ui Ri Ui Ri U Ri '
+            self.scramble('R R U R U Ri Ui Ri Ui Ri U Ri')
+
+        while self.cube['f'][0, 1] != self.cube['f'][1, 1]:
+            self.solution += 'U '
+            self.U()
