@@ -47,6 +47,21 @@ class Cube:
         print("\nBack: ")
         print(colorize(self.cube['b']) + '\n')
 
+    def solve(self):
+        if self.solution != '':
+            print(self.solution)
+            return
+
+        self.bottom_cross()
+        self.bottom_corners()
+
+        moves = ['U', 'L', 'F', 'R', 'D', 'B']
+        for move in moves:
+            self.solution = self.solution.replace(move + ' ' + move + ' ' + move, move + 'i')
+            self.solution = self.solution.replace(move + ' ' + move + 'i ', '')
+            self.solution = self.solution.replace(move + 'i ' + move + ' ', '')
+        print(self.solution)
+
     def scramble(self, string):
         string = string.split(" ")
 
@@ -474,3 +489,59 @@ class Cube:
         self.solution += 'B B '
         self.scramble('B B')
 
+    def bottom_corners(self):
+        color = self.cube['d'][1, 1]
+        free_corners = [0, 1, 2, 3]
+
+        if self.cube['u'][0, 0] == color or self.cube['l'][0, 0] == color or self.cube['b'][2, 0] == color:
+            free_corners.remove(0)
+        if self.cube['u'][0, 2] == color or self.cube['r'][0, 2] == color or self.cube['b'][2, 2] == color:
+            free_corners.remove(1)
+        if self.cube['u'][2, 2] == color or self.cube['r'][0, 0] == color or self.cube['f'][0, 2] == color:
+            free_corners.remove(2)
+        if self.cube['u'][0, 0] == color or self.cube['l'][0, 0] == color or self.cube['b'][2, 0] == color:
+            free_corners.remove(3)
+
+        while free_corners:
+            while self.cube['d'][0, 2] != color and self.cube['f'][2, 2] != color and self.cube['r'][2, 0] != color:
+                self.solution += 'D '
+                self.D()
+
+            move = ''
+            if 2 in free_corners:
+                move = 'R U Ri Ui '
+                free_corners.remove(2)
+            elif 1 in free_corners:
+                move = 'U R U Ri U U '
+                free_corners.remove(1)
+            elif 3 in free_corners:
+                move = 'Ui R U Ri '
+                free_corners.remove(3)
+            else:
+                move = 'U U R U Ri U '
+                free_corners.remove(0)
+
+            if move:
+                self.solution += move
+                self.scramble(move)
+
+        move = 'R U Ri Ui '
+        for _ in range(4):
+            colors = [self.cube['u'][2, 2], self.cube['f'][0, 2], self.cube['r'][0, 0]]
+            while color not in colors:
+                self.solution += 'U '
+                self.U()
+                colors = [self.cube['u'][2, 2], self.cube['f'][0, 2], self.cube['r'][0, 0]]
+
+            while self.cube['f'][2, 1] not in colors or self.cube['r'][2, 1] not in colors:
+                self.solution += 'D '
+                self.D()
+
+            while self.cube['d'][0, 2] != color or \
+                    self.cube['f'][2, 2] != self.cube['f'][2, 1] or self.cube['r'][2, 0] != self.cube['r'][2, 1]:
+                self.solution += move
+                self.scramble(move)
+
+        while self.cube['f'][2, 1] != self.cube['f'][1, 1]:
+            self.solution += 'D '
+            self.D()
