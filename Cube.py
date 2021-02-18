@@ -54,6 +54,7 @@ class Cube:
 
         self.bottom_cross()
         self.bottom_corners()
+        self.middle_edges()
 
         moves = ['U', 'L', 'F', 'R', 'D', 'B']
         for move in moves:
@@ -507,7 +508,6 @@ class Cube:
                 self.solution += 'D '
                 self.D()
 
-            move = ''
             if 2 in free_corners:
                 move = 'R U Ri Ui '
                 free_corners.remove(2)
@@ -545,3 +545,112 @@ class Cube:
         while self.cube['f'][2, 1] != self.cube['f'][1, 1]:
             self.solution += 'D '
             self.D()
+
+    def middle_edges(self):
+        color = self.cube['u'][1, 1]
+        free_edges = [0, 1, 2, 3]
+
+        if self.cube['u'][0, 1] != color and self.cube['b'][2, 1] != color:
+            free_edges.remove(0)
+        if self.cube['u'][1, 2] != color and self.cube['r'][0, 1] != color:
+            free_edges.remove(1)
+        if self.cube['u'][2, 1] != color and self.cube['f'][0, 1] != color:
+            free_edges.remove(2)
+        if self.cube['u'][1, 0] != color and self.cube['l'][0, 1] != color:
+            free_edges.remove(3)
+
+        while free_edges:
+            move = ''
+            if self.cube['f'][1, 2] != color and self.cube['r'][1, 0] != color:
+                if 0 in free_edges:
+                    move = 'Fi U F U R Ui Ri U '
+                    free_edges.remove(0)
+                elif 1 in free_edges:
+                    move = 'Ui Fi U F U R Ui Ri U U '
+                    free_edges.remove(1)
+                elif 2 in free_edges:
+                    move = 'U U Fi U F U R Ui Ri Ui '
+                    free_edges.remove(2)
+                else:
+                    move = 'U Fi U F U R Ui Ri '
+                    free_edges.remove(3)
+            elif self.cube['r'][1, 2] != color and self.cube['b'][1, 2] != color:
+                if 0 in free_edges:
+                    move = 'Ui Ri U R U B Ui Bi U U '
+                    free_edges.remove(0)
+                elif 1 in free_edges:
+                    move = 'U U Ri U R U B Ui Bi Ui '
+                    free_edges.remove(1)
+                elif 2 in free_edges:
+                    move = 'U Ri U R U B Ui Bi '
+                    free_edges.remove(2)
+                else:
+                    move = 'Ri U R U B Ui Bi U '
+                    free_edges.remove(3)
+            elif self.cube['l'][1, 0] != color and self.cube['b'][1, 0] != color:
+                if 0 in free_edges:
+                    move = 'U U Bi U B U L Ui Li Ui '
+                    free_edges.remove(0)
+                elif 1 in free_edges:
+                    move = 'U Bi U B U L Ui Li '
+                    free_edges.remove(1)
+                elif 2 in free_edges:
+                    move = 'Bi U B U L Ui Li U '
+                    free_edges.remove(2)
+                else:
+                    move = 'Ui Bi U B U L Ui Li U U '
+                    free_edges.remove(3)
+            elif self.cube['l'][1, 2] != color and self.cube['f'][1, 0] != color:
+                if 0 in free_edges:
+                    move = 'U Li U L U F Ui Fi '
+                    free_edges.remove(0)
+                elif 1 in free_edges:
+                    move = 'Li U L U F Ui Fi U '
+                    free_edges.remove(1)
+                elif 2 in free_edges:
+                    move = 'Ui Li U L U F Ui Fi U U '
+                    free_edges.remove(2)
+                else:
+                    move = 'U U Li U L U F Ui Fi Ui '
+                    free_edges.remove(3)
+
+            if move:
+                self.solution += move
+                self.scramble(move)
+
+        for _ in range(4):
+            while self.cube['u'][2, 1] == color or self.cube['f'][0, 1] == color:
+                self.solution += 'U '
+                self.U()
+
+            up = self.cube['u'][2, 1]
+            front = self.cube['f'][0, 1]
+
+            move = ''
+            if front == self.cube['f'][1, 1]:
+                if up == self.cube['r'][1, 1]:
+                    move = 'U R Ui Ri Ui Fi U F '
+                elif up == self.cube['l'][1, 1]:
+                    move = 'Ui Li U L U F Ui Fi '
+
+            elif front == self.cube['r'][1, 1]:
+                if up == self.cube['b'][1, 1]:
+                    move = 'B Ui Bi Ui Ri U R '
+                elif up == self.cube['f'][1, 1]:
+                    move = 'U U Fi U F U R Ui Ri '
+
+            elif front == self.cube['l'][1, 1]:
+                if up == self.cube['f'][1, 1]:
+                    move = 'U U F Ui Fi Ui Li U L '
+                elif up == self.cube['b'][1, 1]:
+                    move = 'Bi U B U L Ui Li '
+
+            elif front == self.cube['b'][1, 1]:
+                if up == self.cube['l'][1, 1]:
+                    move = 'Ui L Ui Li Ui Bi U B '
+                elif up == self.cube['r'][1, 1]:
+                    move = 'U Ri U R U B Ui Bi '
+
+            if move:
+                self.solution += move
+                self.scramble(move)
