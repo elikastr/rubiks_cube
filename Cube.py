@@ -48,12 +48,14 @@ class Cube:
         print(colorize(self.cube['b']) + '\n')
 
     def solve(self):
-        self.bottom_cross()
-        self.bottom_corners()
-        self.middle_edges()
-        self.top_cross()
-        self.top_corners()
-        self.top_edges()
+        self.solution = ''
+
+        self.__bottom_cross()
+        self.__bottom_corners()
+        self.__middle_edges()
+        self.__top_cross()
+        self.__top_corners()
+        self.__top_edges()
 
         moves = ['U', 'L', 'F', 'R', 'D', 'B']
         for move in moves:
@@ -219,7 +221,7 @@ class Cube:
         self.D()
         self.D()
 
-    def bottom_cross(self):
+    def __bottom_cross(self):
         color = self.cube['d'][1, 1]
         free_spaces = [0, 1, 2, 3]
 
@@ -489,7 +491,7 @@ class Cube:
         self.solution += 'B B '
         self.scramble('B B')
 
-    def bottom_corners(self):
+    def __bottom_corners(self):
         color = self.cube['d'][1, 1]
         combinations = [[color, self.cube['f'][1, 1], self.cube['r'][1, 1]],
                         [color, self.cube['l'][1, 1], self.cube['f'][1, 1]],
@@ -542,7 +544,7 @@ class Cube:
             self.solution += 'D '
             self.D()
 
-    def middle_edges(self):
+    def __middle_edges(self):
         color = self.cube['u'][1, 1]
         free_edges = [0, 1, 2, 3]
 
@@ -651,7 +653,7 @@ class Cube:
                 self.solution += move
                 self.scramble(move)
 
-    def top_cross(self):
+    def __top_cross(self):
         color = self.cube['u'][1, 1]
         edges = []
 
@@ -680,7 +682,7 @@ class Cube:
             if self.cube['u'][1, 0] == color:
                 edges.append(3)
 
-    def top_corners(self):
+    def __top_corners(self):
         color = self.cube['u'][1, 1]
 
         corners = 0
@@ -734,7 +736,7 @@ class Cube:
         self.solution += move
         self.scramble(move)
 
-    def top_edges(self):
+    def __top_edges(self):
         if self.cube['b'][2, 1] != self.cube['b'][2, 0] \
                 and self.cube['l'][0, 1] != self.cube['l'][0, 0] \
                 and self.cube['f'][0, 1] != self.cube['f'][0, 0] \
