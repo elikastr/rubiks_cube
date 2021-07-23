@@ -59,16 +59,22 @@ struct firstSide: View {
                                 switch self.squars1[row*3 + col] {
                                 case "y":
                                     self.squars1[row*3 + col] = "b"
+                                    //print(self.squars1)
                                 case "b":
                                     self.squars1[row*3 + col] = "g"
+                                    //print(self.squars1)
                                 case "g":
                                     self.squars1[row*3 + col] = "o"
+                                    //print(self.squars1)
                                 case "o":
                                     self.squars1[row*3 + col] = "w"
+                                    //print(self.squars1)
                                 case "w":
                                     self.squars1[row*3 + col] = "r"
+                                    //print(self.squars1)
                                 default:
                                     self.squars1[row*3 + col] = "y"
+                                    //print(self.squars1)
                                 }
                                 
                                 //print(self.squars1[row*3 + col])
