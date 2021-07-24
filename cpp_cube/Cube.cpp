@@ -54,7 +54,7 @@ void Cube::rotate(std::string &face) {
 }
 
 // rotate front face clockwise
-void Cube::F() {
+void Cube::F(int i) {
     rotate(front);
 
     std::string temp = up.substr(6, 3);
@@ -74,17 +74,21 @@ void Cube::F() {
     right[0] = temp[0];
     right[3] = temp[1];
     right[6] = temp[2];
+
+    if (i) solution.append("F ");
 }
 
 // rotate front face counter clockwise
 void Cube::Fi() {
-    F();
-    F();
-    F();
+    F(0);
+    F(0);
+    F(0);
+
+    solution.append("Fi ");
 }
 
 // rotate up face clockwise
-void Cube::U() {
+void Cube::U(int i) {
     rotate(up);
 
     std::string temp = front.substr(0, 3);
@@ -104,17 +108,21 @@ void Cube::U() {
     left[0] = temp[0];
     left[1] = temp[1];
     left[2] = temp[2];
+
+    if (i) solution.append("U ");
 }
 
 // rotate up face counter clockwise
 void Cube::Ui() {
-    U();
-    U();
-    U();
+    U(0);
+    U(0);
+    U(0);
+
+    solution.append("Ui ");
 }
 
 // rotate left face clockwise
-void Cube::L() {
+void Cube::L(int i) {
     rotate(left);
 
     std::string temp;
@@ -137,17 +145,21 @@ void Cube::L() {
     front[0] = temp[0];
     front[3] = temp[1];
     front[6] = temp[2];
+
+    if (i) solution.append("L ");
 }
 
 // rotate left face counter clockwise
 void Cube::Li() {
-    L();
-    L();
-    L();
+    L(0);
+    L(0);
+    L(0);
+
+    solution.append("Li ");
 }
 
 // rotate right face clockwise
-void Cube::R() {
+void Cube::R(int i) {
     rotate(right);
 
     std::string temp;
@@ -170,17 +182,21 @@ void Cube::R() {
     back[6] = temp[0];
     back[3] = temp[1];
     back[0] = temp[2];
+
+    if (i) solution.append("R ");
 }
 
 // rotate right face counter clockwise
 void Cube::Ri() {
-    R();
-    R();
-    R();
+    R(0);
+    R(0);
+    R(0);
+
+    solution.append("Ri ");
 }
 
 // rotate back face clockwise
-void Cube::B() {
+void Cube::B(int i) {
     rotate(back);
 
     std::string temp = up.substr(0, 3);
@@ -200,17 +216,21 @@ void Cube::B() {
     left[0] = temp[2];
     left[3] = temp[1];
     left[6] = temp[0];
+
+    if (i) solution.append("B ");
 }
 
 // rotate back face counter clockwise
 void Cube::Bi() {
-    B();
-    B();
-    B();
+    B(0);
+    B(0);
+    B(0);
+
+    solution.append("Bi ");
 }
 
 // rotate down face clockwise
-void Cube::D() {
+void Cube::D(int i) {
     rotate(down);
 
     std::string temp = front.substr(6, 3);
@@ -230,198 +250,174 @@ void Cube::D() {
     right[6] = temp[0];
     right[7] = temp[1];
     right[8] = temp[2];
+
+    if (i) solution.append("D ");
 }
 
 // rotate down face counter clockwise
 void Cube::Di() {
-    D();
-    D();
-    D();
+    D(0);
+    D(0);
+    D(0);
+
+    solution.append("Di ");
 }
 
 // solve bottom cross
 void Cube::bottomCross() {
     char color = down[4];
 
-    // solve "daisy"
-    // put all down edges on up face
+    // bring bottom edges to the top
     while (up[1] != color || up[3] != color || up[5] != color || up[7] != color) {
         if (front[1] == color) {
-            solution.append("F Ui R U ");
             F(); Ui(); R(); U();
         }
         if (right[1] == color) {
-            solution.append("R Ui B U ");
             R(); Ui(); B(); U();
         }
         if (back[1] == color) {
-            solution.append("B Ui L U ");
             B(); Ui(); L(); U();
         }
         if (left[1] == color) {
-            solution.append("L Ui F U ");
             L(); Ui(); F(); U();
         }
 
         if (front[3] == color) {
-            while (up[3] == color) {
-                solution.append("U ");
-                U();
-            }
-            solution.append("Li ");
+            while (up[3] == color) U();
             Li();
         }
         if (front[5] == color) {
-            while (up[5] == color) {
-                solution.append("U ");
-                U();
-            }
-            solution.append("R ");
+            while (up[5] == color) U();
             R();
         }
         if (right[3] == color) {
-            while (up[7] == color) {
-                solution.append("U ");
-                U();
-            }
-            solution.append("Fi ");
+            while (up[7] == color) U();
             Fi();
         }
         if (right[5] == color) {
-            while (up[1] == color) {
-                solution.append("U ");
-                U();
-            }
-            solution.append("B ");
+            while (up[1] == color) U();
             B();
         }
         if (left[3] == color) {
-            while (up[1] == color) {
-                solution.append("U ");
-                U();
-            }
-            solution.append("Bi ");
+            while (up[1] == color) U();
             Bi();
         }
         if (left[5] == color) {
-            while (up[7] == color) {
-                solution.append("U ");
-                U();
-            }
-            solution.append("F ");
+            while (up[7] == color) U();
             F();
         }
         if (back[3] == color) {
-            while (up[5] == color) {
-                solution.append("U ");
-                U();
-            }
-            solution.append("Ri ");
+            while (up[5] == color) U();
             Ri();
         }
         if (back[5] == color) {
-            while (up[3] == color) {
-                solution.append("U ");
-                U();
-            }
-            solution.append("L ");
+            while (up[3] == color) U();
             L();
         }
 
         if (down[1] == color) {
-            while (up[7] == color) {
-                solution.append("U ");
-                U();
-            }
-            solution.append("F F ");
+            while (up[7] == color) U();
             F(); F();
         }
         if (down[3] == color) {
-            while (up[3] == color) {
-                solution.append("U ");
-                U();
-            }
-            solution.append("L L ");
+            while (up[3] == color) U();
             L(); L();
         }
         if (down[5] == color) {
-            while (up[5] == color) {
-                solution.append("U ");
-                U();
-            }
-            solution.append("R R ");
+            while (up[5] == color) U();
             R(); R();
         }
         if (down[7] == color) {
-            while (up[1] == color) {
-                solution.append("U ");
-                U();
-            }
-            solution.append("B B ");
+            while (up[1] == color) U();
             B(); B();
         }
 
         if (front[7] == color) {
-            while (up[7] == color) {
-                solution.append("U ");
-                U();
-            }
-            solution.append("Fi Ui R ");
+            while (up[7] == color) U();
             Fi(); Ui(); R();
         }
         if (right[7] == color) {
-            while (up[5] == color) {
-                solution.append("U ");
-                U();
-            }
-            solution.append("Ri Ui B ");
+            while (up[5] == color) U();
             Ri(); Ui(); B();
         }
         if (left[7] == color) {
-            while (up[3] == color) {
-                solution.append("U ");
-                U();
-            }
-            solution.append("Li Ui F ");
+            while (up[3] == color) U();
             Li(); Ui(); F();
         }
         if (back[7] == color) {
-            while (up[1] == color) {
-                solution.append("U ");
-                U();
-            }
-            solution.append("Bi Ui L ");
+            while (up[1] == color) U();
             Bi(); Ui(); L();
         }
     }
 
-    // solve the cross
-    // bring down all the edges
-    while (front[1] != front[4]) {
-        solution.append("U ");
-        U();
-    }
-    solution.append("F F ");
+    // bring the edges to the bottom
+    while (front[1] != front[4]) U();
     F(); F();
 
-    while (right[1] != right[4]) {
-        solution.append("U ");
-        U();
-    }
-    solution.append("R R ");
+    while (right[1] != right[4]) U();
     R(); R();
 
-    while (left[1] != left[4]) {
-        solution.append("U ");
-        U();
-    }
-    solution.append("L L ");
+    while (left[1] != left[4]) U();
     L(); L();
 
-    while (back[1] != back[4]) {
-        solution.append("U ");
-        U();
-    }
-    solution.append("B B ");
+    while (back[1] != back[4]) U();
     B(); B();
+}
+
+// solve bottom corners
+void Cube::bottomCorners() {
+    char c = down[4];
+
+    // bring bottom corners to the top
+    if (front[8] == c || right[6] == c || down[2] == c) {
+        while (up[8] == c || front[2] == c || right[0] == c) U();
+        R(); U(); Ri(); Ui();
+    }
+    if (front[6] == c || left[8] == c || down[0] == c) {
+        while (up[6] == c || front[0] == c || left[2] == c) U();
+        F(); U(); Fi(); Ui();
+    }
+    if (back[6] == c || right[8] == c || down[8] == c) {
+        while (up[2] == c || right[2] == c || back[0] == c) U();
+        B(); U(); Bi(); Ui();
+    }
+    if (back[8] == c || left[6] == c || down[6] == c) {
+        while (up[0] == c || left[0] == c || back[2] == c) U();
+        L(); U(); Li(); Ui();
+    }
+
+    // bring corners to the bottom
+    char c1 = front[4];
+    char c2 = right[4];
+    while ((up[8] != c && up[8] != c1 && up[8] != c2)
+           || (front[2] != c && front[2] != c1 && front[2] != c2)
+           || (right[0] != c && right[0] != c1 && right[0] != c2)) U();
+    while (front[8] != c1 || right[6] != c2 || down[2] != c) {
+        R(); U(); Ri(); Ui();
+    }
+
+    c2 = left[4];
+    while ((up[6] != c && up[6] != c1 && up[6] != c2)
+           || (front[0] != c && front[0] != c1 && front[0] != c2)
+           || (left[2] != c && left[2] != c1 && left[2] != c2)) U();
+    while (front[6] != c1 || left[8] != c2 || down[0] != c) {
+        F(); U(); Fi(); Ui();
+    }
+
+    c1 = back[4];
+    c2 = right[4];
+    while ((up[2] != c && up[2] != c1 && up[2] != c2)
+           || (back[0] != c && back[0] != c1 && back[0] != c2)
+           || (right[2] != c && right[2] != c1 && right[2] != c2)) U();
+    while (back[6] != c1 || right[8] != c2 || down[8] != c) {
+        B(); U(); Bi(); Ui();
+    }
+
+    c2 = left[4];
+    while ((up[0] != c && up[0] != c1 && up[0] != c2)
+           || (back[2] != c && back[2] != c1 && back[2] != c2)
+           || (left[0] != c && left[0] != c1 && left[0] != c2)) U();
+    while (back[8] != c1 || left[6] != c2 || down[6] != c) {
+        L(); U(); Li(); Ui();
+    }
 }

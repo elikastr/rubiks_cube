@@ -13,17 +13,17 @@ public:
 
     void print();
 
-    void F();
+    void F(int i = 1);
     void Fi();
-    void U();
+    void U(int i = 1);
     void Ui();
-    void L();
+    void L(int i = 1);
     void Li();
-    void R();
+    void R(int i = 1);
     void Ri();
-    void B();
+    void B(int i = 1);
     void Bi();
-    void D();
+    void D(int i = 1);
     void Di();
 
 private:
@@ -32,6 +32,7 @@ private:
     void rotate(std::string &face);
 
     void bottomCross();
+    void bottomCorners();
 };
 
 
