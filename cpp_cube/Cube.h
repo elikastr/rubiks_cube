@@ -30,6 +30,8 @@ private:
     std::string solution;
 
     void rotate(std::string &face);
+
+    void bottomCross();
 };
 
 

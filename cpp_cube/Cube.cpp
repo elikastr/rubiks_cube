@@ -238,3 +238,190 @@ void Cube::Di() {
     D();
     D();
 }
+
+// solve bottom cross
+void Cube::bottomCross() {
+    char color = down[4];
+
+    // solve "daisy"
+    // put all down edges on up face
+    while (up[1] != color || up[3] != color || up[5] != color || up[7] != color) {
+        if (front[1] == color) {
+            solution.append("F Ui R U ");
+            F(); Ui(); R(); U();
+        }
+        if (right[1] == color) {
+            solution.append("R Ui B U ");
+            R(); Ui(); B(); U();
+        }
+        if (back[1] == color) {
+            solution.append("B Ui L U ");
+            B(); Ui(); L(); U();
+        }
+        if (left[1] == color) {
+            solution.append("L Ui F U ");
+            L(); Ui(); F(); U();
+        }
+
+        if (front[3] == color) {
+            while (up[3] == color) {
+                solution.append("U ");
+                U();
+            }
+            solution.append("Li ");
+            Li();
+        }
+        if (front[5] == color) {
+            while (up[5] == color) {
+                solution.append("U ");
+                U();
+            }
+            solution.append("R ");
+            R();
+        }
+        if (right[3] == color) {
+            while (up[7] == color) {
+                solution.append("U ");
+                U();
+            }
+            solution.append("Fi ");
+            Fi();
+        }
+        if (right[5] == color) {
+            while (up[1] == color) {
+                solution.append("U ");
+                U();
+            }
+            solution.append("B ");
+            B();
+        }
+        if (left[3] == color) {
+            while (up[1] == color) {
+                solution.append("U ");
+                U();
+            }
+            solution.append("Bi ");
+            Bi();
+        }
+        if (left[5] == color) {
+            while (up[7] == color) {
+                solution.append("U ");
+                U();
+            }
+            solution.append("F ");
+            F();
+        }
+        if (back[3] == color) {
+            while (up[5] == color) {
+                solution.append("U ");
+                U();
+            }
+            solution.append("Ri ");
+            Ri();
+        }
+        if (back[5] == color) {
+            while (up[3] == color) {
+                solution.append("U ");
+                U();
+            }
+            solution.append("L ");
+            L();
+        }
+
+        if (down[1] == color) {
+            while (up[7] == color) {
+                solution.append("U ");
+                U();
+            }
+            solution.append("F F ");
+            F(); F();
+        }
+        if (down[3] == color) {
+            while (up[3] == color) {
+                solution.append("U ");
+                U();
+            }
+            solution.append("L L ");
+            L(); L();
+        }
+        if (down[5] == color) {
+            while (up[5] == color) {
+                solution.append("U ");
+                U();
+            }
+            solution.append("R R ");
+            R(); R();
+        }
+        if (down[7] == color) {
+            while (up[1] == color) {
+                solution.append("U ");
+                U();
+            }
+            solution.append("B B ");
+            B(); B();
+        }
+
+        if (front[7] == color) {
+            while (up[7] == color) {
+                solution.append("U ");
+                U();
+            }
+            solution.append("Fi Ui R ");
+            Fi(); Ui(); R();
+        }
+        if (right[7] == color) {
+            while (up[5] == color) {
+                solution.append("U ");
+                U();
+            }
+            solution.append("Ri Ui B ");
+            Ri(); Ui(); B();
+        }
+        if (left[7] == color) {
+            while (up[3] == color) {
+                solution.append("U ");
+                U();
+            }
+            solution.append("Li Ui F ");
+            Li(); Ui(); F();
+        }
+        if (back[7] == color) {
+            while (up[1] == color) {
+                solution.append("U ");
+                U();
+            }
+            solution.append("Bi Ui L ");
+            Bi(); Ui(); L();
+        }
+    }
+
+    // solve the cross
+    // bring down all the edges
+    while (front[1] != front[4]) {
+        solution.append("U ");
+        U();
+    }
+    solution.append("F F ");
+    F(); F();
+
+    while (right[1] != right[4]) {
+        solution.append("U ");
+        U();
+    }
+    solution.append("R R ");
+    R(); R();
+
+    while (left[1] != left[4]) {
+        solution.append("U ");
+        U();
+    }
+    solution.append("L L ");
+    L(); L();
+
+    while (back[1] != back[4]) {
+        solution.append("U ");
+        U();
+    }
+    solution.append("B B ");
+    B(); B();
+}
