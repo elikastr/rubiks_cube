@@ -53,6 +53,7 @@ void Cube::rotate(std::string &face) {
     face[8] = temp[2];
 }
 
+// rotate front face clockwise
 void Cube::F() {
     rotate(front);
 
@@ -75,12 +76,14 @@ void Cube::F() {
     right[6] = temp[2];
 }
 
+// rotate front face counter clockwise
 void Cube::Fi() {
     F();
     F();
     F();
 }
 
+// rotate up face clockwise
 void Cube::U() {
     rotate(up);
 
@@ -103,12 +106,14 @@ void Cube::U() {
     left[2] = temp[2];
 }
 
+// rotate up face counter clockwise
 void Cube::Ui() {
     U();
     U();
     U();
 }
 
+// rotate left face clockwise
 void Cube::L() {
     rotate(left);
 
@@ -134,12 +139,14 @@ void Cube::L() {
     front[6] = temp[2];
 }
 
+// rotate left face counter clockwise
 void Cube::Li() {
     L();
     L();
     L();
 }
 
+// rotate right face clockwise
 void Cube::R() {
     rotate(right);
 
@@ -165,12 +172,14 @@ void Cube::R() {
     back[0] = temp[2];
 }
 
+// rotate right face counter clockwise
 void Cube::Ri() {
     R();
     R();
     R();
 }
 
+// rotate back face clockwise
 void Cube::B() {
     rotate(back);
 
@@ -193,12 +202,14 @@ void Cube::B() {
     left[6] = temp[0];
 }
 
+// rotate back face counter clockwise
 void Cube::Bi() {
     B();
     B();
     B();
 }
 
+// rotate down face clockwise
 void Cube::D() {
     rotate(down);
 
@@ -221,6 +232,7 @@ void Cube::D() {
     right[8] = temp[2];
 }
 
+// rotate down face counter clockwise
 void Cube::Di() {
     D();
     D();
