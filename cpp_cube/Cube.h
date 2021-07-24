@@ -13,6 +13,11 @@ public:
 
     void print();
 
+private:
+    std::string solution;
+
+    void rotate(std::string &face);
+
     void F(int i = 1);
     void Fi();
     void U(int i = 1);
@@ -25,11 +30,6 @@ public:
     void Bi();
     void D(int i = 1);
     void Di();
-
-private:
-    std::string solution;
-
-    void rotate(std::string &face);
 
     void bottomCross();
     void bottomCorners();
