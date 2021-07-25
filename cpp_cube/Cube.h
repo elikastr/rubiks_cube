@@ -33,6 +33,7 @@ private:
 
     void bottomCross();
     void bottomCorners();
+    void middleEdges();
 };
 
 

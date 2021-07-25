@@ -421,3 +421,61 @@ void Cube::bottomCorners() {
         L(); U(); Li(); Ui();
     }
 }
+
+void Cube::middleEdges() {
+    char c = up[4];
+
+    // bring middle edges to the top
+    if (front[3] != c && left[5] != c) {
+        while (up[7] != c && front[1] != c) U();
+        Ui(); Li(); U(); L(); U(); F(); Ui(); Fi();
+    }
+    if (front[5] != c && right[3] != c) {
+        while (up[7] != c && front[1] != c) U();
+        U(); R(); Ui(); Ri(); Ui(); Fi(); U(); F();
+    }
+    if (back[3] != c && right[5] != c) {
+        while (up[1] != c && back[1] != c) U();
+        Ui(); Ri(); U(); R(); U(); B(); Ui(); Bi();
+    }
+    if (back[5] != c && left[3] != c) {
+        while (up[1] != c && back[1] != c) U();
+        U(); L(); Ui(); Li(); Ui(); Bi(); U(); B();
+    }
+
+    // bring edges to the middle
+    for (int i = 0; i < 4; i++) {
+        while (up[7] == c || front[1] == c) U();
+
+        char c1 = front[1];
+        char c2 = up[7];
+
+        if (c1 == front[4] && c2 == left[4]) {
+            Ui(); Li(); U(); L(); U(); F(); Ui(); Fi();
+        }
+        else if (c1 == front[4] && c2 == right[4]) {
+            U(); R(); Ui(); Ri(); Ui(); Fi(); U(); F();
+        }
+
+        else if (c1 == left[4] && c2 == back[4]) {
+            Bi(); U(); B(); U(); L(); Ui(); Li();
+        }
+        else if (c1 == left[4] && c2 == front[4]) {
+            U(); U(); F(); Ui(); Fi(); Ui(); Li(); U(); L();
+        }
+
+        else if (c1 == right[4] && c2 == front[4]) {
+            U(); U(); Fi(); U(); F(); U(); R(); Ui(); Ri();
+        }
+        else if (c1 == right[4] && c2 == back[4]) {
+            B(); Ui(); Bi(); Ui(); Ri(); U(); R();
+        }
+
+        else if (c1 == back[4] && c2 == right[4]) {
+            U(); Ri(); U(); R(); U(); B(); Ui(); Bi();
+        }
+        else if (c1 == back[4] && c2 == left[4]) {
+            Ui(); L(); Ui(); Li(); Ui(); Bi(); U(); B();
+        }
+    }
+}
