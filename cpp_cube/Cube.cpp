@@ -11,6 +11,15 @@ Cube::Cube(std::string cube) {
         back.push_back(cube[i + 36]);
         down.push_back(cube[i + 45]);
     }
+
+//    print();
+//    bottomCross();
+//    bottomCorners();
+//    middleEdges();
+//    topCross();
+//    topCorners();
+//    std::cout << solution << std::endl;
+//    print();
 }
 
 Cube::Cube() : Cube("") {}
@@ -265,102 +274,102 @@ void Cube::Di() {
 
 // solve bottom cross
 void Cube::bottomCross() {
-    char color = down[4];
+    char c = down[4];
 
     // bring bottom edges to the top
-    while (up[1] != color || up[3] != color || up[5] != color || up[7] != color) {
-        if (front[1] == color) {
+    while (up[1] != c || up[3] != c || up[5] != c || up[7] != c) {
+        if (front[1] == c) {
             F(); Ui(); R(); U();
         }
-        if (right[1] == color) {
+        if (right[1] == c) {
             R(); Ui(); B(); U();
         }
-        if (back[1] == color) {
+        if (back[1] == c) {
             B(); Ui(); L(); U();
         }
-        if (left[1] == color) {
+        if (left[1] == c) {
             L(); Ui(); F(); U();
         }
 
-        if (front[3] == color) {
-            while (up[3] == color) U();
+        if (front[3] == c) {
+            while (up[3] == c) U();
             Li();
         }
-        if (front[5] == color) {
-            while (up[5] == color) U();
+        if (front[5] == c) {
+            while (up[5] == c) U();
             R();
         }
-        if (right[3] == color) {
-            while (up[7] == color) U();
+        if (right[3] == c) {
+            while (up[7] == c) U();
             Fi();
         }
-        if (right[5] == color) {
-            while (up[1] == color) U();
+        if (right[5] == c) {
+            while (up[1] == c) U();
             B();
         }
-        if (left[3] == color) {
-            while (up[1] == color) U();
+        if (left[3] == c) {
+            while (up[1] == c) U();
             Bi();
         }
-        if (left[5] == color) {
-            while (up[7] == color) U();
+        if (left[5] == c) {
+            while (up[7] == c) U();
             F();
         }
-        if (back[3] == color) {
-            while (up[5] == color) U();
+        if (back[3] == c) {
+            while (up[5] == c) U();
             Ri();
         }
-        if (back[5] == color) {
-            while (up[3] == color) U();
+        if (back[5] == c) {
+            while (up[3] == c) U();
             L();
         }
 
-        if (down[1] == color) {
-            while (up[7] == color) U();
+        if (down[1] == c) {
+            while (up[7] == c) U();
             F(); F();
         }
-        if (down[3] == color) {
-            while (up[3] == color) U();
+        if (down[3] == c) {
+            while (up[3] == c) U();
             L(); L();
         }
-        if (down[5] == color) {
-            while (up[5] == color) U();
+        if (down[5] == c) {
+            while (up[5] == c) U();
             R(); R();
         }
-        if (down[7] == color) {
-            while (up[1] == color) U();
+        if (down[7] == c) {
+            while (up[1] == c) U();
             B(); B();
         }
 
-        if (front[7] == color) {
-            while (up[7] == color) U();
+        if (front[7] == c) {
+            while (up[7] == c) U();
             Fi(); Ui(); R();
         }
-        if (right[7] == color) {
-            while (up[5] == color) U();
+        if (right[7] == c) {
+            while (up[5] == c) U();
             Ri(); Ui(); B();
         }
-        if (left[7] == color) {
-            while (up[3] == color) U();
+        if (left[7] == c) {
+            while (up[3] == c) U();
             Li(); Ui(); F();
         }
-        if (back[7] == color) {
-            while (up[1] == color) U();
+        if (back[7] == c) {
+            while (up[1] == c) U();
             Bi(); Ui(); L();
         }
     }
 
     // bring the edges to the bottom
-    while (front[1] != front[4]) U();
+    while (front[1] != front[4] || up[7] != c) U();
     F(); F();
 
-    while (right[1] != right[4]) U();
+    while (right[1] != right[4] || up[5] != c) U();
     R(); R();
 
-    while (left[1] != left[4]) U();
+    while (left[1] != left[4] || up[3] != c) U();
     L(); L();
 
-    while (back[1] != back[4]) U();
+    while (back[1] != back[4] || up[1] != c) U();
     B(); B();
 }
 
@@ -478,4 +487,57 @@ void Cube::middleEdges() {
             Ui(); L(); Ui(); Li(); Ui(); Bi(); U(); B();
         }
     }
+}
+
+void Cube::topCross() {
+    char c = up[4];
+
+    while (up[1] != c || up[3] != c || up[5] != c || up[7] != c) {
+        if (up[7] == c && (up[3] == c || up[1] == c)) U();
+        else if (up[5] == c && up[7] == c) {
+            U(); U();
+        }
+        else if (up[1] == c && up[5] == c) Ui();
+
+        F(); R(); U(); Ri(); Ui(); Fi();
+    }
+}
+
+void Cube::topCorners() {
+    char c = up[4];
+
+    // orient corners
+    int corners = 0;
+    if (up[0] == c) corners++;
+    if (up[2] == c) corners++;
+    if (up[6] == c) corners++;
+    if (up[8] == c) corners++;
+
+    while (corners != 4) {
+        if (corners == 0) {
+            while (left[2] != c) U();
+        }
+        else if (corners == 1) {
+            while (up[6] != c) U();
+        }
+        else if (corners == 2) {
+            while (front[0] != c) U();
+        }
+
+        R(); U(); Ri(); U(); R(); U(); U(); Ri();
+
+        corners = 0;
+        if (up[0] == c) corners++;
+        if (up[2] == c) corners++;
+        if (up[6] == c) corners++;
+        if (up[8] == c) corners++;
+    }
+
+    // position corners
+    if (left[0] != left[2] && front[0] != front[2] && right[0] != right[2] && back[0] != back[2]) {
+        R(); U(); Ri(); Ui(); Ri(); F(); R(); R(); Ui(); Ri(); Ui(); R(); U(); Ri(); Fi();
+    }
+
+    while (left[0] != left[2]) U();
+    R(); U(); Ri(); Ui(); Ri(); F(); R(); R(); Ui(); Ri(); Ui(); R(); U(); Ri(); Fi();
 }

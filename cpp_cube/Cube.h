@@ -34,6 +34,8 @@ private:
     void bottomCross();
     void bottomCorners();
     void middleEdges();
+    void topCross();
+    void topCorners();
 };
 
 
