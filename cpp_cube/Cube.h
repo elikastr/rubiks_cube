@@ -6,17 +6,20 @@
 
 class Cube {
 public:
-    Cube(std::string cube);
-    Cube();
+    explicit Cube(std::string cube = "");
 
     std::string up, left, front, right, back, down;
 
     void print();
 
+    std::string solve();
+
 private:
     std::string solution;
 
-    void rotate(std::string &face);
+    void replace(const std::string& s1, const std::string& s2);
+
+    static void rotate(std::string &face);
 
     void F(int i = 1);
     void Fi();
@@ -28,14 +31,15 @@ private:
     void Ri();
     void B(int i = 1);
     void Bi();
-    void D(int i = 1);
-    void Di();
+//    void D(int i = 1);
+//    void Di();
 
     void bottomCross();
     void bottomCorners();
     void middleEdges();
     void topCross();
     void topCorners();
+    void topEdges();
 };
 
 

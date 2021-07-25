@@ -11,33 +11,69 @@ Cube::Cube(std::string cube) {
         left.push_back(cube[i + 36]);
         down.push_back(cube[i + 45]);
     }
-
-//    print();
-//    bottomCross();
-//    solution += '\n';
-//    bottomCorners();
-//    solution += '\n';
-//    middleEdges();
-//    solution += '\n';
-//    topCross();
-//    solution += '\n';
-//    topCorners();
-//    solution += '\n';
-//
-////    int k = 0;
-////    for (char & i : solution) {
-////        if (i == ' ') k++;
-////        if (k == 30) {
-////            i = '\n';
-////            k = 0;
-////        }
-////    }
-//
-//    std::cout << solution << std::endl;
-//    print();
 }
 
-Cube::Cube() : Cube("") {}
+void Cube::replace(const std::string& s1, const std::string& s2) {
+    size_t pos = solution.find(s1);
+
+    while (pos != std::string::npos) {
+        solution.replace(pos, s1.size(), s2);
+        pos = solution.find(s1, pos + s2.size());
+    }
+}
+
+std::string Cube::solve() {
+    if (!solution.empty()) return solution;
+
+    bottomCross();
+    bottomCorners();
+    middleEdges();
+    topCross();
+    topCorners();
+    topEdges();
+
+    replace("U U U", "Ui");
+    replace("U Ui ", "");
+    replace("Ui U ", "");
+    replace("Ui Ui", "U U");
+
+    replace("F F F", "Fi");
+    replace("F Fi ", "");
+    replace("Fi F ", "");
+    replace("Fi Fi", "F F");
+
+    replace("L L L", "Li");
+    replace("L Li ", "");
+    replace("Li L ", "");
+    replace("Li Li", "L L");
+
+    replace("R R R", "Ri");
+    replace("R Ri ", "");
+    replace("Ri R ", "");
+    replace("Ri Ri", "R R");
+
+    replace("B B B", "Bi");
+    replace("B Bi ", "");
+    replace("Bi B ", "");
+    replace("Bi Bi", "B B");
+
+    replace("D D D", "Di");
+    replace("D Di ", "");
+    replace("Di D ", "");
+    replace("Di Di", "D D");
+
+    int k = 0;
+    for (char & c : solution) {
+        if (c == ' ') k++;
+        if (k == 30) {
+            c = '\n';
+            k = 0;
+        }
+    }
+
+    std::cout << solution << std::endl;
+    return solution;
+}
 
 void Cube::print() {
     std::cout << "    " << up[0] << up[1] << up[2] << std::endl;
@@ -253,6 +289,7 @@ void Cube::Bi() {
     solution.append("Bi ");
 }
 
+/***
 // rotate down face clockwise
 void Cube::D(int i) {
     rotate(down);
@@ -286,6 +323,7 @@ void Cube::Di() {
 
     solution.append("Di ");
 }
+***/
 
 // solve bottom cross
 void Cube::bottomCross() {
@@ -553,8 +591,21 @@ void Cube::topCorners() {
         R(); U(); Ri(); Ui(); Ri(); F(); R(); R(); Ui(); Ri(); Ui(); R(); U(); Ri(); Fi();
     }
 
-    if (left[0] != left[2] || front[0] != front[2] || right[0] != right[2] || back[0] != back[2]) {
+    while (left[0] != left[2] || front[0] != front[2] || right[0] != right[2] || back[0] != back[2]) {
         while (left[0] != left[2]) U();
         R(); U(); Ri(); Ui(); Ri(); F(); R(); R(); Ui(); Ri(); Ui(); R(); U(); Ri(); Fi();
     }
+}
+
+void Cube::topEdges() {
+    if (front[0] != front[1] && right[0] != right[1] && back[0] != back[1] && left[0] != left[1]) {
+        R(); Ui(); R(); U(); R(); U(); R(); Ui(); Ri(); Ui(); R(); R();
+    }
+
+    while (front[0] != front[1] || right[0] != right[1] || back[0] != back[1] || left[0] != left[1]) {
+        while (back[0] != back[1]) U();
+        R(); Ui(); R(); U(); R(); U(); R(); Ui(); Ri(); Ui(); R(); R();
+    }
+
+    while (front[1] != front[4]) U();
 }
