@@ -1,23 +1,38 @@
 #include "Cube.h"
 
 Cube::Cube(std::string cube) {
-    if (cube.size() != 54) cube = "wwwwwwwwwooooooooogggggggggrrrrrrrrrbbbbbbbbbyyyyyyyyy";
+    if (cube.size() != 54) cube = "wwwwwwwwwgggggggggrrrrrrrrrbbbbbbbbboooooooooyyyyyyyyy";
 
     for (int i = 0; i < 9; i++) {
         up.push_back(cube[i]);
-        left.push_back(cube[i + 9]);
-        front.push_back(cube[i + 18]);
-        right.push_back(cube[i + 27]);
-        back.push_back(cube[i + 36]);
+        front.push_back(cube[i + 9]);
+        right.push_back(cube[i + 18]);
+        back.push_back(cube[i + 27]);
+        left.push_back(cube[i + 36]);
         down.push_back(cube[i + 45]);
     }
 
 //    print();
 //    bottomCross();
+//    solution += '\n';
 //    bottomCorners();
+//    solution += '\n';
 //    middleEdges();
+//    solution += '\n';
 //    topCross();
+//    solution += '\n';
 //    topCorners();
+//    solution += '\n';
+//
+////    int k = 0;
+////    for (char & i : solution) {
+////        if (i == ' ') k++;
+////        if (k == 30) {
+////            i = '\n';
+////            k = 0;
+////        }
+////    }
+//
 //    std::cout << solution << std::endl;
 //    print();
 }
@@ -538,6 +553,8 @@ void Cube::topCorners() {
         R(); U(); Ri(); Ui(); Ri(); F(); R(); R(); Ui(); Ri(); Ui(); R(); U(); Ri(); Fi();
     }
 
-    while (left[0] != left[2]) U();
-    R(); U(); Ri(); Ui(); Ri(); F(); R(); R(); Ui(); Ri(); Ui(); R(); U(); Ri(); Fi();
+    if (left[0] != left[2] || front[0] != front[2] || right[0] != right[2] || back[0] != back[2]) {
+        while (left[0] != left[2]) U();
+        R(); U(); Ri(); Ui(); Ri(); F(); R(); R(); Ui(); Ri(); Ui(); R(); U(); Ri(); Fi();
+    }
 }
