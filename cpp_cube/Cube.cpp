@@ -37,35 +37,35 @@ std::string Cube::solve() {
         return solution;
     }
 
-    replace("U U U", "Ui");
+    replace("U U U ", "Ui ");
     replace("U Ui ", "");
     replace("Ui U ", "");
-    replace("Ui Ui", "U U");
+    replace("Ui Ui ", "U U ");
 
-    replace("F F F", "Fi");
+    replace("F F F ", "Fi ");
     replace("F Fi ", "");
     replace("Fi F ", "");
-    replace("Fi Fi", "F F");
+    replace("Fi Fi ", "F F ");
 
-    replace("L L L", "Li");
+    replace("L L L ", "Li ");
     replace("L Li ", "");
     replace("Li L ", "");
-    replace("Li Li", "L L");
+    replace("Li Li ", "L L ");
 
-    replace("R R R", "Ri");
+    replace("R R R ", "Ri ");
     replace("R Ri ", "");
     replace("Ri R ", "");
-    replace("Ri Ri", "R R");
+    replace("Ri Ri ", "R R ");
 
-    replace("B B B", "Bi");
+    replace("B B B ", "Bi ");
     replace("B Bi ", "");
     replace("Bi B ", "");
-    replace("Bi Bi", "B B");
+    replace("Bi Bi ", "B B ");
 
-    replace("D D D", "Di");
+    replace("D D D ", "Di ");
     replace("D Di ", "");
     replace("Di D ", "");
-    replace("Di Di", "D D");
+    replace("Di Di ", "D D ");
 
     int k = 0;
     for (char & c : solution) {
@@ -594,35 +594,36 @@ void Cube::bottomCorners() {
     }
 }
 
+// solve middle edges
 void Cube::middleEdges() {
     char c = up[4];
 
-    // check if already solved
-    if (front[3] == front[4] && front[5] == front[4]
-        && right[3] == right[4] && right[5] == right[4]
-        && back[3] == back[4] && back[5] == back[4]
-        && left[3] == left[4] && left[5] == left[4]) return;
-
-    // bring middle edges to the top
-    if (front[3] != c && left[5] != c) {
+    // bring incorrect middle edges to the top
+    if (front[3] != c && left[5] != c && (front[3] != front[4] || left[5] != left[4])) {
         while (up[7] != c && front[1] != c) U();
         Ui(); Li(); U(); L(); U(); F(); Ui(); Fi();
     }
-    if (front[5] != c && right[3] != c) {
+    if (front[5] != c && right[3] != c && (front[5] != front[4] || right[3] != right[4])) {
         while (up[7] != c && front[1] != c) U();
         U(); R(); Ui(); Ri(); Ui(); Fi(); U(); F();
     }
-    if (back[3] != c && right[5] != c) {
+    if (back[3] != c && right[5] != c && (back[3] != back[4] || right[5] != right[4])) {
         while (up[1] != c && back[1] != c) U();
         Ui(); Ri(); U(); R(); U(); B(); Ui(); Bi();
     }
-    if (back[5] != c && left[3] != c) {
+    if (back[5] != c && left[3] != c && (back[5] != back[4] || left[3] != left[4])) {
         while (up[1] != c && back[1] != c) U();
         U(); L(); Ui(); Li(); Ui(); Bi(); U(); B();
     }
 
     // bring edges to the middle
-    for (int i = 0; i < 4; i++) {
+    int k = 0;
+    if (isEdgeUp(front[4], left[4]) || isEdgeUp(left[4], front[4])) k++;
+    if (isEdgeUp(front[4], right[4]) || isEdgeUp(right[4], front[4])) k++;
+    if (isEdgeUp(back[4], left[4]) || isEdgeUp(left[4], back[4])) k++;
+    if (isEdgeUp(back[4], right[4]) || isEdgeUp(right[4], back[4])) k++;
+
+    for (int i = 0; i < k; i++) {
         while (up[7] == c || front[1] == c) U();
 
         char c1 = front[1];

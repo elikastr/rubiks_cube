@@ -36,10 +36,9 @@ private:
 
     bool isEdgeUp(const char c1, const char c2);
     bool isCornerUp(const char c1, const char c2, const char c3);
-
     bool isCrossReady();
-    void bottomCross();
 
+    void bottomCross();
     void bottomCorners();
     void middleEdges();
     void topCross();
