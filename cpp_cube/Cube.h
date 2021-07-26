@@ -35,8 +35,9 @@ private:
 //    void Di();
 
     bool isEdgeUp(const char c1, const char c2);
+    bool isCornerUp(const char c1, const char c2, const char c3);
 
-    bool crossReady();
+    bool isCrossReady();
     void bottomCross();
 
     void bottomCorners();

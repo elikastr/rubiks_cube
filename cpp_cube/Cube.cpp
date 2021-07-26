@@ -294,6 +294,7 @@ void Cube::Bi() {
     solution.append("Bi ");
 }
 
+// rotations of down face are not used in this algorithm, but we keep them just in case
 /***
 // rotate down face clockwise
 void Cube::D(int i) {
@@ -330,7 +331,7 @@ void Cube::Di() {
 }
 ***/
 
-// check if a given edge is at the top layer
+// check if a given edge is at the top layer (permuted correctly)
 bool Cube::isEdgeUp(const char c1, const char c2) {
     if (up[1] == c1 && back[1] == c2) return true;
     if (up[3] == c1 && left[1] == c2) return true;
@@ -339,7 +340,41 @@ bool Cube::isEdgeUp(const char c1, const char c2) {
     return false;
 }
 
-bool Cube::crossReady() {
+// check if a given corner is at the top layer
+bool Cube::isCornerUp(const char c1, const char c2, const char c3) {
+    if (up[0] == c1 && back[2] == c2 && left[0] == c3) return true;
+    if (up[0] == c1 && back[2] == c3 && left[0] == c2) return true;
+    if (up[0] == c2 && back[2] == c1 && left[0] == c3) return true;
+    if (up[0] == c2 && back[2] == c3 && left[0] == c1) return true;
+    if (up[0] == c3 && back[2] == c1 && left[0] == c2) return true;
+    if (up[0] == c3 && back[2] == c2 && left[0] == c1) return true;
+
+    if (up[2] == c1 && back[0] == c2 && right[2] == c3) return true;
+    if (up[2] == c1 && back[0] == c3 && right[2] == c2) return true;
+    if (up[2] == c2 && back[0] == c1 && right[2] == c3) return true;
+    if (up[2] == c2 && back[0] == c3 && right[2] == c1) return true;
+    if (up[2] == c3 && back[0] == c1 && right[2] == c2) return true;
+    if (up[2] == c3 && back[0] == c2 && right[2] == c1) return true;
+
+    if (up[6] == c1 && front[0] == c2 && left[2] == c3) return true;
+    if (up[6] == c1 && front[0] == c3 && left[2] == c2) return true;
+    if (up[6] == c2 && front[0] == c1 && left[2] == c3) return true;
+    if (up[6] == c2 && front[0] == c3 && left[2] == c1) return true;
+    if (up[6] == c3 && front[0] == c1 && left[2] == c2) return true;
+    if (up[6] == c3 && front[0] == c2 && left[2] == c1) return true;
+
+    if (up[8] == c1 && front[2] == c2 && right[0] == c3) return true;
+    if (up[8] == c1 && front[2] == c3 && right[0] == c2) return true;
+    if (up[8] == c2 && front[2] == c1 && right[0] == c3) return true;
+    if (up[8] == c2 && front[2] == c3 && right[0] == c1) return true;
+    if (up[8] == c3 && front[2] == c1 && right[0] == c2) return true;
+    if (up[8] == c3 && front[2] == c2 && right[0] == c1) return true;
+
+    return false;
+}
+
+// check if the bottom edges are in the correct position to continue the algorithm
+bool Cube::isCrossReady() {
     char c1 = down[4];
     char c2 = front[4];
     if ((front[7] != c2 || down[1] != c1) && !isEdgeUp(c1, c2)) return false;
@@ -356,10 +391,11 @@ bool Cube::crossReady() {
     return true;
 }
 
+// solve bottom cross
 void Cube::bottomCross() {
     char c = down[4];
 
-    while (!crossReady()) {
+    while (!isCrossReady()) {
         // bring incorrect edges to the top layer
         if (front[1] == c) {
             F(); Ui(); R(); U();
@@ -468,27 +504,20 @@ void Cube::bottomCross() {
 void Cube::bottomCorners() {
     char c = down[4];
 
-    // check if already solved
-    if (front[6] == front[4] && front[8] == front[4]
-        && right[6] == right[4] && right[8] == right[4]
-        && back[6] == back[4] && back[8] == back[4]
-        && left[6] == left[4] && left[8] == left[4]
-        && down[0] == c && down[2] == c && down[6] == c && down[8] == c) return;
-
-    // bring bottom corners to the top
-    if (front[8] == c || right[6] == c || down[2] == c) {
+    // bring incorrect corners to the top
+    if (front[8] == c || right[6] == c || (down[2] == c && (front[8] != front[4] || right[6] != right[4]))) {
         while (up[8] == c || front[2] == c || right[0] == c) U();
         R(); U(); Ri(); Ui();
     }
-    if (front[6] == c || left[8] == c || down[0] == c) {
+    if (front[6] == c || left[8] == c || (down[0] == c && (front[6] != front[4] || left[8] != left[4]))) {
         while (up[6] == c || front[0] == c || left[2] == c) U();
         F(); U(); Fi(); Ui();
     }
-    if (back[6] == c || right[8] == c || down[8] == c) {
+    if (back[6] == c || right[8] == c || (down[8] == c && (back[6] != back[4] || right[8] != right[4]))) {
         while (up[2] == c || right[2] == c || back[0] == c) U();
         B(); U(); Bi(); Ui();
     }
-    if (back[8] == c || left[6] == c || down[6] == c) {
+    if (back[8] == c || left[6] == c || (down[6] == c && (back[8] != back[4] || left[6] != left[4]))) {
         while (up[0] == c || left[0] == c || back[2] == c) U();
         L(); U(); Li(); Ui();
     }
@@ -496,36 +525,72 @@ void Cube::bottomCorners() {
     // bring corners to the bottom
     char c1 = front[4];
     char c2 = right[4];
-    while ((up[8] != c && up[8] != c1 && up[8] != c2)
-           || (front[2] != c && front[2] != c1 && front[2] != c2)
-           || (right[0] != c && right[0] != c1 && right[0] != c2)) U();
-    while (front[8] != c1 || right[6] != c2 || down[2] != c) {
-        R(); U(); Ri(); Ui();
+    if (isCornerUp(c, c1, c2)) {
+        while ((up[8] != c && up[8] != c1 && up[8] != c2)
+               || (front[2] != c && front[2] != c1 && front[2] != c2)
+               || (right[0] != c && right[0] != c1 && right[0] != c2)) U();
+
+        if (right[0] == c) {
+            R(); U(); Ri();
+        }
+        else if (front[2] == c) {
+            Fi(); Ui(); F();
+        }
+        else {
+            R(); U(); U(); Ri(); Ui(); R(); U(); Ri();
+        }
     }
 
     c2 = left[4];
-    while ((up[6] != c && up[6] != c1 && up[6] != c2)
-           || (front[0] != c && front[0] != c1 && front[0] != c2)
-           || (left[2] != c && left[2] != c1 && left[2] != c2)) U();
-    while (front[6] != c1 || left[8] != c2 || down[0] != c) {
-        F(); U(); Fi(); Ui();
+    if (isCornerUp(c, c1, c2)) {
+        while ((up[6] != c && up[6] != c1 && up[6] != c2)
+               || (front[0] != c && front[0] != c1 && front[0] != c2)
+               || (left[2] != c && left[2] != c1 && left[2] != c2)) U();
+
+        if (left[2] == c) {
+            Li(); Ui(); L();
+        }
+        else if (front[0] == c) {
+            F(); U(); Fi();
+        }
+        else {
+            Li(); U(); U(); L(); U(); Li(); Ui(); L();
+        }
     }
 
     c1 = back[4];
     c2 = right[4];
-    while ((up[2] != c && up[2] != c1 && up[2] != c2)
-           || (back[0] != c && back[0] != c1 && back[0] != c2)
-           || (right[2] != c && right[2] != c1 && right[2] != c2)) U();
-    while (back[6] != c1 || right[8] != c2 || down[8] != c) {
-        B(); U(); Bi(); Ui();
+    if (isCornerUp(c, c1, c2)) {
+        while ((up[2] != c && up[2] != c1 && up[2] != c2)
+               || (back[0] != c && back[0] != c1 && back[0] != c2)
+               || (right[2] != c && right[2] != c1 && right[2] != c2)) U();
+
+        if (back[0] == c) {
+            B(); U(); Bi();
+        }
+        else if (right[2] == c) {
+            Ri(); Ui(); R();
+        }
+        else {
+            Ri(); U(); U(); R(); U(); Ri(); Ui(); R();
+        }
     }
 
     c2 = left[4];
-    while ((up[0] != c && up[0] != c1 && up[0] != c2)
-           || (back[2] != c && back[2] != c1 && back[2] != c2)
-           || (left[0] != c && left[0] != c1 && left[0] != c2)) U();
-    while (back[8] != c1 || left[6] != c2 || down[6] != c) {
-        L(); U(); Li(); Ui();
+    if (isCornerUp(c, c1, c2)) {
+        while ((up[0] != c && up[0] != c1 && up[0] != c2)
+               || (back[2] != c && back[2] != c1 && back[2] != c2)
+               || (left[0] != c && left[0] != c1 && left[0] != c2)) U();
+
+        if (back[2] == c) {
+            Bi(); Ui(); B();
+        }
+        else if (left[0] == c) {
+            L(); U(); Li();
+        }
+        else {
+            L(); U(); U(); Li(); Ui(); L(); U(); Li();
+        }
     }
 }
 
