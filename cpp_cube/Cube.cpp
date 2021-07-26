@@ -23,7 +23,10 @@ void Cube::replace(const std::string& s1, const std::string& s2) {
 }
 
 std::string Cube::solve() {
-    if (!solution.empty()) return solution;
+    if (!solution.empty()) {
+        std::cout << solution << std::endl;
+        return solution;
+    }
 
     bottomCross();
     bottomCorners();
@@ -659,6 +662,7 @@ void Cube::middleEdges() {
     }
 }
 
+// solve top cross
 void Cube::topCross() {
     char c = up[4];
 
@@ -673,6 +677,7 @@ void Cube::topCross() {
     }
 }
 
+// solve top corners
 void Cube::topCorners() {
     char c = up[4];
 
@@ -721,7 +726,12 @@ void Cube::topEdges() {
 
     while (front[0] != front[1] || right[0] != right[1] || back[0] != back[1] || left[0] != left[1]) {
         while (back[0] != back[1]) U();
-        R(); Ui(); R(); U(); R(); U(); R(); Ui(); Ri(); Ui(); R(); R();
+        if (front[1] == left[4]) {
+            R(); R(); U(); R(); U(); Ri(); Ui(); Ri(); Ui(); Ri(); U(); Ri();
+        }
+        else {
+            R(); Ui(); R(); U(); R(); U(); R(); Ui(); Ri(); Ui(); R(); R();
+        }
     }
 
     while (front[1] != front[4]) U();
