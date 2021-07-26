@@ -34,7 +34,11 @@ private:
 //    void D(int i = 1);
 //    void Di();
 
+    bool isEdgeUp(const char c1, const char c2);
+
+    bool crossReady();
     void bottomCross();
+
     void bottomCorners();
     void middleEdges();
     void topCross();

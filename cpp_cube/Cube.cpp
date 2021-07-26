@@ -32,6 +32,11 @@ std::string Cube::solve() {
     topCorners();
     topEdges();
 
+    if (solution.empty()) {
+        std::cout << "The cube is already solved!" << std::endl;
+        return solution;
+    }
+
     replace("U U U", "Ui");
     replace("U Ui ", "");
     replace("Ui U ", "");
@@ -65,7 +70,7 @@ std::string Cube::solve() {
     int k = 0;
     for (char & c : solution) {
         if (c == ' ') k++;
-        if (k == 30) {
+        if (k == 20) {
             c = '\n';
             k = 0;
         }
@@ -325,12 +330,37 @@ void Cube::Di() {
 }
 ***/
 
-// solve bottom cross
+// check if a given edge is at the top layer
+bool Cube::isEdgeUp(const char c1, const char c2) {
+    if (up[1] == c1 && back[1] == c2) return true;
+    if (up[3] == c1 && left[1] == c2) return true;
+    if (up[5] == c1 && right[1] == c2) return true;
+    if (up[7] == c1 && front[1] == c2) return true;
+    return false;
+}
+
+bool Cube::crossReady() {
+    char c1 = down[4];
+    char c2 = front[4];
+    if ((front[7] != c2 || down[1] != c1) && !isEdgeUp(c1, c2)) return false;
+
+    c2 = right[4];
+    if ((right[7] != c2 || down[5] != c1) && !isEdgeUp(c1, c2)) return false;
+
+    c2 = left[4];
+    if ((left[7] != c2 || down[3] != c1) && !isEdgeUp(c1, c2)) return false;
+
+    c2 = back[4];
+    if ((back[7] != c2 || down[7] != c1) && !isEdgeUp(c1, c2)) return false;
+
+    return true;
+}
+
 void Cube::bottomCross() {
     char c = down[4];
 
-    // bring bottom edges to the top
-    while (up[1] != c || up[3] != c || up[5] != c || up[7] != c) {
+    while (!crossReady()) {
+        // bring incorrect edges to the top layer
         if (front[1] == c) {
             F(); Ui(); R(); U();
         }
@@ -377,23 +407,6 @@ void Cube::bottomCross() {
             L();
         }
 
-        if (down[1] == c) {
-            while (up[7] == c) U();
-            F(); F();
-        }
-        if (down[3] == c) {
-            while (up[3] == c) U();
-            L(); L();
-        }
-        if (down[5] == c) {
-            while (up[5] == c) U();
-            R(); R();
-        }
-        if (down[7] == c) {
-            while (up[1] == c) U();
-            B(); B();
-        }
-
         if (front[7] == c) {
             while (up[7] == c) U();
             Fi(); Ui(); R();
@@ -410,25 +423,57 @@ void Cube::bottomCross() {
             while (up[1] == c) U();
             Bi(); Ui(); L();
         }
+
+        if (down[1] == c && front[7] != front[4]) {
+            while (up[7] == c) U();
+            F(); F();
+        }
+        if (down[3] == c && left[7] != left[4]) {
+            while (up[3] == c) U();
+            L(); L();
+        }
+        if (down[5] == c && right[7] != right[4]) {
+            while (up[5] == c) U();
+            R(); R();
+        }
+        if (down[7] == c && back[7] != back[4]) {
+            while (up[1] == c) U();
+            B(); B();
+        }
     }
 
-    // bring the edges to the bottom
-    while (front[1] != front[4] || up[7] != c) U();
-    F(); F();
+    // bring down the corners
+    if (front[7] != front[4] || down[1] != c) {
+        while (front[1] != front[4] || up[7] != c) U();
+        F(); F();
+    }
 
-    while (right[1] != right[4] || up[5] != c) U();
-    R(); R();
+    if (right[7] != right[4] || down[5] != c) {
+        while (right[1] != right[4] || up[5] != c) U();
+        R(); R();
+    }
 
-    while (left[1] != left[4] || up[3] != c) U();
-    L(); L();
+    if (left[7] != left[4] || down[3] != c) {
+        while (left[1] != left[4] || up[3] != c) U();
+        L(); L();
+    }
 
-    while (back[1] != back[4] || up[1] != c) U();
-    B(); B();
+    if (back[7] != back[4] || down[7] != c) {
+        while (back[1] != back[4] || up[1] != c) U();
+        B(); B();
+    }
 }
 
 // solve bottom corners
 void Cube::bottomCorners() {
     char c = down[4];
+
+    // check if already solved
+    if (front[6] == front[4] && front[8] == front[4]
+        && right[6] == right[4] && right[8] == right[4]
+        && back[6] == back[4] && back[8] == back[4]
+        && left[6] == left[4] && left[8] == left[4]
+        && down[0] == c && down[2] == c && down[6] == c && down[8] == c) return;
 
     // bring bottom corners to the top
     if (front[8] == c || right[6] == c || down[2] == c) {
@@ -486,6 +531,12 @@ void Cube::bottomCorners() {
 
 void Cube::middleEdges() {
     char c = up[4];
+
+    // check if already solved
+    if (front[3] == front[4] && front[5] == front[4]
+        && right[3] == right[4] && right[5] == right[4]
+        && back[3] == back[4] && back[5] == back[4]
+        && left[3] == left[4] && left[5] == left[4]) return;
 
     // bring middle edges to the top
     if (front[3] != c && left[5] != c) {
