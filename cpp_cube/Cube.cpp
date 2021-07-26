@@ -43,32 +43,38 @@ std::string Cube::solve() {
     replace("U U U ", "Ui ");
     replace("U Ui ", "");
     replace("Ui U ", "");
-    replace("Ui Ui ", "U U ");
+    replace("Ui Ui ", "U2 ");
+    replace("U U ", "U2 ");
 
     replace("F F F ", "Fi ");
     replace("F Fi ", "");
     replace("Fi F ", "");
-    replace("Fi Fi ", "F F ");
+    replace("Fi Fi ", "F2 ");
+    replace("F F ", "F2 ");
 
     replace("L L L ", "Li ");
     replace("L Li ", "");
     replace("Li L ", "");
-    replace("Li Li ", "L L ");
+    replace("Li Li ", "L2 ");
+    replace("L L ", "L2 ");
 
     replace("R R R ", "Ri ");
     replace("R Ri ", "");
     replace("Ri R ", "");
-    replace("Ri Ri ", "R R ");
+    replace("Ri Ri ", "R2 ");
+    replace("R R ", "R2 ");
 
     replace("B B B ", "Bi ");
     replace("B Bi ", "");
     replace("Bi B ", "");
-    replace("Bi Bi ", "B B ");
+    replace("Bi Bi ", "B2 ");
+    replace("B B ", "B2 ");
 
-    replace("D D D ", "Di ");
-    replace("D Di ", "");
-    replace("Di D ", "");
-    replace("Di Di ", "D D ");
+//    replace("D D D ", "Di ");
+//    replace("D Di ", "");
+//    replace("Di D ", "");
+//    replace("Di Di ", "D2 ");
+//    replace("D D ", "D2 ");
 
     int k = 0;
     for (char & c : solution) {
@@ -710,7 +716,7 @@ void Cube::topCorners() {
 
     // position corners
     if (left[0] != left[2] && front[0] != front[2] && right[0] != right[2] && back[0] != back[2]) {
-        R(); U(); Ri(); Ui(); Ri(); F(); R(); R(); Ui(); Ri(); Ui(); R(); U(); Ri(); Fi();
+        Ri(); U(); Li(); U(); U(); R(); Ui(); L(); Ri(); U(); Li(); U(); U(); R(); Ui(); L();
     }
 
     while (left[0] != left[2] || front[0] != front[2] || right[0] != right[2] || back[0] != back[2]) {
@@ -726,7 +732,7 @@ void Cube::topEdges() {
 
     while (front[0] != front[1] || right[0] != right[1] || back[0] != back[1] || left[0] != left[1]) {
         while (back[0] != back[1]) U();
-        if (front[1] == left[4]) {
+        if (front[1] == left[0]) {
             R(); R(); U(); R(); U(); Ri(); Ui(); Ri(); Ui(); Ri(); U(); Ri();
         }
         else {
