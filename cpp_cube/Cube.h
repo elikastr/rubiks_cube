@@ -4,9 +4,11 @@
 #include <iostream>
 #include <string>
 
+#define CUBE "wwwwwwwwwgggggggggrrrrrrrrrbbbbbbbbboooooooooyyyyyyyyy"
+
 class Cube {
 public:
-    explicit Cube(std::string cube = "");
+    explicit Cube(std::string cube = CUBE);
 
     std::string up, left, front, right, back, down;
 
@@ -17,6 +19,7 @@ public:
 private:
     std::string solution;
 
+    static void count(char v, int counter[]);
     void replace(const std::string& s1, const std::string& s2);
 
     static void rotate(std::string &face);
@@ -34,8 +37,8 @@ private:
 //    void D(int i = 1);
 //    void Di();
 
-    bool isEdgeUp(const char c1, const char c2);
-    bool isCornerUp(const char c1, const char c2, const char c3);
+    bool isEdgeUp(char c1, char c2);
+    bool isCornerUp(char c1, char c2, char c3);
     bool isCrossReady();
 
     void bottomCross();

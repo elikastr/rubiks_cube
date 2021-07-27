@@ -1,7 +1,37 @@
 #include "Cube.h"
 
 Cube::Cube(std::string cube) {
-    if (cube.size() != 54) cube = "wwwwwwwwwgggggggggrrrrrrrrrbbbbbbbbboooooooooyyyyyyyyy";
+    bool isSolved = false;
+
+    if (!isSolved && cube.size() != 54) {
+        std::cout << "Each color must be added exactly 9 times" << std::endl;
+        cube = CUBE;
+        isSolved = true;
+    }
+
+    int counter[6] = {0, 0, 0, 0, 0, 0};
+    for (int i = 0; i < 54 && !isSolved; i++) {
+        count(cube[i], counter);
+    }
+    for (int i = 0; i < 5 && !isSolved; i++) {
+        if (counter[i] != 9) {
+            std::cout << "Each color must be added exactly 9 times" << std::endl;
+            cube = CUBE;
+            isSolved = true;
+        }
+        counter[i] = 0;
+    }
+
+    for (int i = 4; i <= 49 && !isSolved; i += 9) {
+        count(cube[i], counter);
+    }
+    for (int i = 0; i < 5 && !isSolved; i++) {
+        if (counter[i] != 1) {
+            std::cout << "Each color must be used exacly 1 time as a center field" << std::endl;
+            cube = CUBE;
+            isSolved = true;
+        }
+    }
 
     for (int i = 0; i < 9; i++) {
         up.push_back(cube[i]);
@@ -10,6 +40,32 @@ Cube::Cube(std::string cube) {
         back.push_back(cube[i + 27]);
         left.push_back(cube[i + 36]);
         down.push_back(cube[i + 45]);
+    }
+}
+
+void Cube::count(char v, int counter[]) {
+    switch (v) {
+        case 'w':
+            counter[0]++;
+            break;
+        case 'g':
+            counter[1]++;
+            break;
+        case 'r':
+            counter[2]++;
+            break;
+        case 'b':
+            counter[3]++;
+            break;
+        case 'o':
+            counter[4]++;
+            break;
+        case 'y':
+            counter[5]++;
+            break;
+        default:
+            std::cout << "Incorrect symbol entered: " << v << std::endl;
+            return;
     }
 }
 
