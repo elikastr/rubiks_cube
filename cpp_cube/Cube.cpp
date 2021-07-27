@@ -79,22 +79,23 @@ void Cube::replace(const std::string& s1, const std::string& s2) {
 }
 
 std::string Cube::solve() {
-    if (!solution.empty()) {
-        std::cout << solution << std::endl;
-        return solution;
-    }
+    if (!solution.empty()) return solution;
 
+    std::string msg = "Impossible scramble";
     bottomCross();
+    if (solution == "*") return msg;
     bottomCorners();
+    if (solution == "*") return msg;
     middleEdges();
+    if (solution == "*") return msg;
     topCross();
+    if (solution == "*") return msg;
     topCorners();
+    if (solution == "*") return msg;
     topEdges();
+    if (solution == "*") return msg;
 
-    if (solution.empty()) {
-        std::cout << "The cube is already solved!" << std::endl;
-        return solution;
-    }
+    if (solution.empty()) return "The cube is already solved!";
 
     replace("U U U ", "Ui ");
     replace("U Ui ", "");
@@ -141,7 +142,6 @@ std::string Cube::solve() {
         }
     }
 
-    std::cout << solution << std::endl;
     return solution;
 }
 
@@ -460,7 +460,15 @@ bool Cube::isCrossReady() {
 void Cube::bottomCross() {
     char c = down[4];
 
+    int k = 0;
+    int i = 0;
     while (!isCrossReady()) {
+        k++;
+        if (k == MAX) {
+            solution = "*";
+            return;
+        }
+
         // bring incorrect edges to the top layer
         if (front[1] == c) {
             F(); Ui(); R(); U();
@@ -476,91 +484,271 @@ void Cube::bottomCross() {
         }
 
         if (front[3] == c) {
-            while (up[3] == c) U();
+            i = 0;
+            while (up[3] == c) {
+                i++;
+                if (i == MAX) {
+                    solution = "*";
+                    return;
+                }
+
+                U();
+            }
             Li();
         }
         if (front[5] == c) {
-            while (up[5] == c) U();
+            i = 0;
+            while (up[5] == c) {
+                i++;
+                if (i == MAX) {
+                    solution = "*";
+                    return;
+                }
+
+                U();
+            }
             R();
         }
         if (right[3] == c) {
-            while (up[7] == c) U();
+            i = 0;
+            while (up[7] == c) {
+                i++;
+                if (i == MAX) {
+                    solution = "*";
+                    return;
+                }
+
+                U();
+            }
             Fi();
         }
         if (right[5] == c) {
-            while (up[1] == c) U();
+            i = 0;
+            while (up[1] == c) {
+                i++;
+                if (i == MAX) {
+                    solution = "*";
+                    return;
+                }
+
+                U();
+            }
             B();
         }
         if (left[3] == c) {
-            while (up[1] == c) U();
+            i = 0;
+            while (up[1] == c) {
+                i++;
+                if (i == MAX) {
+                    solution = "*";
+                    return;
+                }
+
+                U();
+            }
             Bi();
         }
         if (left[5] == c) {
-            while (up[7] == c) U();
+            i = 0;
+            while (up[7] == c) {
+                i++;
+                if (i == MAX) {
+                    solution = "*";
+                    return;
+                }
+
+                U();
+            }
             F();
         }
         if (back[3] == c) {
-            while (up[5] == c) U();
+            i = 0;
+            while (up[5] == c) {
+                i++;
+                if (i == MAX) {
+                    solution = "*";
+                    return;
+                }
+
+                U();
+            }
             Ri();
         }
         if (back[5] == c) {
-            while (up[3] == c) U();
+            i = 0;
+            while (up[3] == c) {
+                i++;
+                if (i == MAX) {
+                    solution = "*";
+                    return;
+                }
+
+                U();
+            }
             L();
         }
 
         if (front[7] == c) {
-            while (up[7] == c) U();
+            i = 0;
+            while (up[7] == c) {
+                i++;
+                if (i == MAX) {
+                    solution = "*";
+                    return;
+                }
+
+                U();
+            }
             Fi(); Ui(); R();
         }
         if (right[7] == c) {
-            while (up[5] == c) U();
+            i = 0;
+            while (up[5] == c) {
+                i++;
+                if (i == MAX) {
+                    solution = "*";
+                    return;
+                }
+
+                U();
+            }
             Ri(); Ui(); B();
         }
         if (left[7] == c) {
-            while (up[3] == c) U();
+            i = 0;
+            while (up[3] == c) {
+                i++;
+                if (i == MAX) {
+                    solution = "*";
+                    return;
+                }
+
+                U();
+            }
             Li(); Ui(); F();
         }
         if (back[7] == c) {
-            while (up[1] == c) U();
+            i = 0;
+            while (up[1] == c) {
+                i++;
+                if (i == MAX) {
+                    solution = "*";
+                    return;
+                }
+
+                U();
+            }
             Bi(); Ui(); L();
         }
 
         if (down[1] == c && front[7] != front[4]) {
-            while (up[7] == c) U();
+            i = 0;
+            while (up[7] == c) {
+                i++;
+                if (i == MAX) {
+                    solution = "*";
+                    return;
+                }
+
+                U();
+            }
             F(); F();
         }
         if (down[3] == c && left[7] != left[4]) {
-            while (up[3] == c) U();
+            i = 0;
+            while (up[3] == c) {
+                i++;
+                if (i == MAX) {
+                    solution = "*";
+                    return;
+                }
+
+                U();
+            }
             L(); L();
         }
         if (down[5] == c && right[7] != right[4]) {
-            while (up[5] == c) U();
+            i = 0;
+            while (up[5] == c) {
+                i++;
+                if (i == MAX) {
+                    solution = "*";
+                    return;
+                }
+
+                U();
+            }
             R(); R();
         }
         if (down[7] == c && back[7] != back[4]) {
-            while (up[1] == c) U();
+            i = 0;
+            while (up[1] == c) {
+                i++;
+                if (i == MAX) {
+                    solution = "*";
+                    return;
+                }
+
+                U();
+            }
             B(); B();
         }
     }
 
     // bring down the corners
     if (front[7] != front[4] || down[1] != c) {
-        while (front[1] != front[4] || up[7] != c) U();
+        i = 0;
+        while (front[1] != front[4] || up[7] != c) {
+            i++;
+            if (i == MAX) {
+                solution = "*";
+                return;
+            }
+
+            U();
+        }
         F(); F();
     }
 
     if (right[7] != right[4] || down[5] != c) {
-        while (right[1] != right[4] || up[5] != c) U();
+        i = 0;
+        while (right[1] != right[4] || up[5] != c) {
+            i++;
+            if (i == MAX) {
+                solution = "*";
+                return;
+            }
+
+            U();
+        }
         R(); R();
     }
 
     if (left[7] != left[4] || down[3] != c) {
-        while (left[1] != left[4] || up[3] != c) U();
+        i = 0;
+        while (left[1] != left[4] || up[3] != c) {
+            i++;
+            if (i == MAX) {
+                solution = "*";
+                return;
+            }
+
+            U();
+        }
         L(); L();
     }
 
     if (back[7] != back[4] || down[7] != c) {
-        while (back[1] != back[4] || up[1] != c) U();
+        i = 0;
+        while (back[1] != back[4] || up[1] != c) {
+            i++;
+            if (i == MAX) {
+                solution = "*";
+                return;
+            }
+
+            U();
+        }
         B(); B();
     }
 }
@@ -570,20 +758,58 @@ void Cube::bottomCorners() {
     char c = down[4];
 
     // bring incorrect corners to the top
+    int i = 0;
+
     if (front[8] == c || right[6] == c || (down[2] == c && (front[8] != front[4] || right[6] != right[4]))) {
-        while (up[8] == c || front[2] == c || right[0] == c) U();
+        i = 0;
+        while (up[8] == c || front[2] == c || right[0] == c) {
+            i++;
+            if (i == MAX) {
+                solution = "*";
+                return;
+            }
+
+            U();
+        }
         R(); U(); Ri(); Ui();
     }
     if (front[6] == c || left[8] == c || (down[0] == c && (front[6] != front[4] || left[8] != left[4]))) {
-        while (up[6] == c || front[0] == c || left[2] == c) U();
+        i = 0;
+        while (up[6] == c || front[0] == c || left[2] == c) {
+            i++;
+            if (i == MAX) {
+                solution = "*";
+                return;
+            }
+
+            U();
+        }
         F(); U(); Fi(); Ui();
     }
     if (back[6] == c || right[8] == c || (down[8] == c && (back[6] != back[4] || right[8] != right[4]))) {
-        while (up[2] == c || right[2] == c || back[0] == c) U();
+        i = 0;
+        while (up[2] == c || right[2] == c || back[0] == c) {
+            i++;
+            if (i == MAX) {
+                solution = "*";
+                return;
+            }
+
+            U();
+        }
         B(); U(); Bi(); Ui();
     }
     if (back[8] == c || left[6] == c || (down[6] == c && (back[8] != back[4] || left[6] != left[4]))) {
-        while (up[0] == c || left[0] == c || back[2] == c) U();
+        i = 0;
+        while (up[0] == c || left[0] == c || back[2] == c) {
+            i++;
+            if (i == MAX) {
+                solution = "*";
+                return;
+            }
+
+            U();
+        }
         L(); U(); Li(); Ui();
     }
 
@@ -591,9 +817,18 @@ void Cube::bottomCorners() {
     char c1 = front[4];
     char c2 = right[4];
     if (isCornerUp(c, c1, c2)) {
+        i = 0;
         while ((up[8] != c && up[8] != c1 && up[8] != c2)
                || (front[2] != c && front[2] != c1 && front[2] != c2)
-               || (right[0] != c && right[0] != c1 && right[0] != c2)) U();
+               || (right[0] != c && right[0] != c1 && right[0] != c2)) {
+            i++;
+            if (i == MAX) {
+                solution = "*";
+                return;
+            }
+
+            U();
+        }
 
         if (right[0] == c) {
             R(); U(); Ri();
@@ -608,9 +843,18 @@ void Cube::bottomCorners() {
 
     c2 = left[4];
     if (isCornerUp(c, c1, c2)) {
+        i = 0;
         while ((up[6] != c && up[6] != c1 && up[6] != c2)
                || (front[0] != c && front[0] != c1 && front[0] != c2)
-               || (left[2] != c && left[2] != c1 && left[2] != c2)) U();
+               || (left[2] != c && left[2] != c1 && left[2] != c2)) {
+            i++;
+            if (i == MAX) {
+                solution = "*";
+                return;
+            }
+
+            U();
+        }
 
         if (left[2] == c) {
             Li(); Ui(); L();
@@ -626,9 +870,18 @@ void Cube::bottomCorners() {
     c1 = back[4];
     c2 = right[4];
     if (isCornerUp(c, c1, c2)) {
+        i = 0;
         while ((up[2] != c && up[2] != c1 && up[2] != c2)
                || (back[0] != c && back[0] != c1 && back[0] != c2)
-               || (right[2] != c && right[2] != c1 && right[2] != c2)) U();
+               || (right[2] != c && right[2] != c1 && right[2] != c2)) {
+            i++;
+            if (i == MAX) {
+                solution = "*";
+                return;
+            }
+
+            U();
+        }
 
         if (back[0] == c) {
             B(); U(); Bi();
@@ -643,9 +896,18 @@ void Cube::bottomCorners() {
 
     c2 = left[4];
     if (isCornerUp(c, c1, c2)) {
+        i = 0;
         while ((up[0] != c && up[0] != c1 && up[0] != c2)
                || (back[2] != c && back[2] != c1 && back[2] != c2)
-               || (left[0] != c && left[0] != c1 && left[0] != c2)) U();
+               || (left[0] != c && left[0] != c1 && left[0] != c2)) {
+            i++;
+            if (i == MAX) {
+                solution = "*";
+                return;
+            }
+
+            U();
+        }
 
         if (back[2] == c) {
             Bi(); Ui(); B();
@@ -664,20 +926,58 @@ void Cube::middleEdges() {
     char c = up[4];
 
     // bring incorrect middle edges to the top
+    int i = 0;
+
     if (front[3] != c && left[5] != c && (front[3] != front[4] || left[5] != left[4])) {
-        while (up[7] != c && front[1] != c) U();
+        i = 0;
+        while (up[7] != c && front[1] != c) {
+            i++;
+            if (i == MAX) {
+                solution = "*";
+                return;
+            }
+
+            U();
+        }
         Ui(); Li(); U(); L(); U(); F(); Ui(); Fi();
     }
     if (front[5] != c && right[3] != c && (front[5] != front[4] || right[3] != right[4])) {
-        while (up[7] != c && front[1] != c) U();
+        i = 0;
+        while (up[7] != c && front[1] != c) {
+            i++;
+            if (i == MAX) {
+                solution = "*";
+                return;
+            }
+
+            U();
+        }
         U(); R(); Ui(); Ri(); Ui(); Fi(); U(); F();
     }
     if (back[3] != c && right[5] != c && (back[3] != back[4] || right[5] != right[4])) {
-        while (up[1] != c && back[1] != c) U();
+        i = 0;
+        while (up[1] != c && back[1] != c) {
+            i++;
+            if (i == MAX) {
+                solution = "*";
+                return;
+            }
+
+            U();
+        }
         Ui(); Ri(); U(); R(); U(); B(); Ui(); Bi();
     }
     if (back[5] != c && left[3] != c && (back[5] != back[4] || left[3] != left[4])) {
-        while (up[1] != c && back[1] != c) U();
+        i = 0;
+        while (up[1] != c && back[1] != c) {
+            i++;
+            if (i == MAX) {
+                solution = "*";
+                return;
+            }
+
+            U();
+        }
         U(); L(); Ui(); Li(); Ui(); Bi(); U(); B();
     }
 
@@ -688,8 +988,17 @@ void Cube::middleEdges() {
     if (isEdgeUp(back[4], left[4]) || isEdgeUp(left[4], back[4])) k++;
     if (isEdgeUp(back[4], right[4]) || isEdgeUp(right[4], back[4])) k++;
 
-    for (int i = 0; i < k; i++) {
-        while (up[7] == c || front[1] == c) U();
+    for (int j = 0; j < k; j++) {
+        int m = 0;
+        while (up[7] == c || front[1] == c) {
+            m++;
+            if (m == MAX) {
+                solution = "*";
+                return;
+            }
+
+            U();
+        }
 
         char c1 = front[1];
         char c2 = up[7];
@@ -728,7 +1037,14 @@ void Cube::middleEdges() {
 void Cube::topCross() {
     char c = up[4];
 
+    int k = 0;
     while (up[1] != c || up[3] != c || up[5] != c || up[7] != c) {
+        k++;
+        if (k == MAX) {
+            solution = "*";
+            return;
+        }
+
         if (up[7] == c && (up[3] == c || up[1] == c)) U();
         else if (up[5] == c && up[7] == c) {
             U(); U();
@@ -750,15 +1066,50 @@ void Cube::topCorners() {
     if (up[6] == c) corners++;
     if (up[8] == c) corners++;
 
+    int k = 0;
+    int i = 0;
     while (corners != 4) {
+        k++;
+        if (k == MAX) {
+            solution = "*";
+            return;
+        }
+
         if (corners == 0) {
-            while (left[2] != c) U();
+            i = 0;
+            while (left[2] != c) {
+                i++;
+                if (i == MAX) {
+                    solution = "*";
+                    return;
+                }
+
+                U();
+            }
         }
         else if (corners == 1) {
-            while (up[6] != c) U();
+            i = 0;
+            while (up[6] != c) {
+                i++;
+                if (i == MAX) {
+                    solution = "*";
+                    return;
+                }
+
+                U();
+            }
         }
         else if (corners == 2) {
-            while (front[0] != c) U();
+            i = 0;
+            while (front[0] != c) {
+                i++;
+                if (i == MAX) {
+                    solution = "*";
+                    return;
+                }
+
+                U();
+            }
         }
 
         R(); U(); Ri(); U(); R(); U(); U(); Ri();
@@ -775,8 +1126,24 @@ void Cube::topCorners() {
         Ri(); U(); Li(); U(); U(); R(); Ui(); L(); Ri(); U(); Li(); U(); U(); R(); Ui(); L();
     }
 
+    k = 0;
     while (left[0] != left[2] || front[0] != front[2] || right[0] != right[2] || back[0] != back[2]) {
-        while (left[0] != left[2]) U();
+        k++;
+        if (k == MAX) {
+            solution = "*";
+            return;
+        }
+
+        i = 0;
+        while (left[0] != left[2]) {
+            i++;
+            if (i == MAX) {
+                solution = "*";
+                return;
+            }
+
+            U();
+        }
         R(); U(); Ri(); Ui(); Ri(); F(); R(); R(); Ui(); Ri(); Ui(); R(); U(); Ri(); Fi();
     }
 }
@@ -786,8 +1153,25 @@ void Cube::topEdges() {
         R(); Ui(); R(); U(); R(); U(); R(); Ui(); Ri(); Ui(); R(); R();
     }
 
+    int k = 0;
+    int i = 0;
     while (front[0] != front[1] || right[0] != right[1] || back[0] != back[1] || left[0] != left[1]) {
-        while (back[0] != back[1]) U();
+        k++;
+        if (k == MAX) {
+            solution = "*";
+            return;
+        }
+
+        i = 0;
+        while (back[0] != back[1]) {
+            i++;
+            if (i == MAX) {
+                solution = "*";
+                return;
+            }
+
+            U();
+        }
         if (front[1] == left[0]) {
             R(); R(); U(); R(); U(); Ri(); Ui(); Ri(); Ui(); Ri(); U(); Ri();
         }
@@ -796,5 +1180,14 @@ void Cube::topEdges() {
         }
     }
 
-    while (front[1] != front[4]) U();
+    i = 0;
+    while (front[1] != front[4]) {
+        i++;
+        if (i == MAX) {
+            solution = "*";
+            return;
+        }
+
+        U();
+    }
 }
