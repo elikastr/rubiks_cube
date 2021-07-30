@@ -16,6 +16,7 @@ public:
     void print();
 
     std::string solve();
+    std::string* solveToArray();
 
 private:
     std::string solution;

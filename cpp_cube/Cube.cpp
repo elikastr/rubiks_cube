@@ -1,4 +1,5 @@
 #include "Cube.h"
+#include <vector>
 
 Cube::Cube(std::string cube) {
     bool isSolved = false;
@@ -81,21 +82,42 @@ void Cube::replace(const std::string& s1, const std::string& s2) {
 std::string Cube::solve() {
     if (!solution.empty()) return solution;
 
-    std::string msg = "Impossible scramble";
+    std::string msg = "*Impossible scramble*";
     bottomCross();
-    if (solution == "*") return msg;
+    if (solution == "*") {
+        solution = msg;
+        return solution;
+    }
     bottomCorners();
-    if (solution == "*") return msg;
+    if (solution == "*") {
+        solution = msg;
+        return solution;
+    }
     middleEdges();
-    if (solution == "*") return msg;
+    if (solution == "*") {
+        solution = msg;
+        return solution;
+    }
     topCross();
-    if (solution == "*") return msg;
+    if (solution == "*") {
+        solution = msg;
+        return solution;
+    }
     topCorners();
-    if (solution == "*") return msg;
+    if (solution == "*") {
+        solution = msg;
+        return solution;
+    }
     topEdges();
-    if (solution == "*") return msg;
+    if (solution == "*") {
+        solution = msg;
+        return solution;
+    }
 
-    if (solution.empty()) return "The cube is already solved!";
+    if (solution.empty()) {
+        solution = "*The cube is already solved*";
+        return solution;
+    }
 
     replace("U U U ", "Ui ");
     replace("U Ui ", "");
@@ -143,6 +165,36 @@ std::string Cube::solve() {
     }
 
     return solution;
+}
+
+std::string * Cube::solveToArray() {
+    solve();
+
+    if (solution[0] == '*') {
+        auto *array = new std::string[2];
+        array[0] = solution;
+        array[1] = "0";
+        return array;
+    }
+
+    std::vector<std::string> v;
+
+    int k = 0;
+    for (int i = 0; i < solution.size(); i++) {
+        if (solution[i] == ' ') {
+            v.push_back(solution.substr(k, i - k));
+            k = i + 1;
+        }
+    }
+
+    auto *array = new std::string[v.size() + 1];
+
+    for (int i = 0; i < v.size(); i++) {
+        array[i] = v[i];
+    }
+    array[v.size()] = "0";
+
+    return array;
 }
 
 void Cube::print() {
