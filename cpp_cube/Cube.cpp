@@ -188,6 +188,7 @@ std::string * Cube::solveToArray() {
     }
 
     auto *array = new std::string[v.size() + 1];
+    if (!array) return nullptr;
 
     for (int i = 0; i < v.size(); i++) {
         array[i] = v[i];
