@@ -5,7 +5,7 @@ Cube::Cube(std::string cube) {
     bool isSolved = false;
 
     if (!isSolved && cube.size() != 54) {
-        std::cout << "Each color must be added exactly 9 times" << std::endl;
+        solution = "*Each color must be added exactly 9 times*";
         cube = CUBE;
         isSolved = true;
     }
@@ -16,7 +16,7 @@ Cube::Cube(std::string cube) {
     }
     for (int i = 0; i < 5 && !isSolved; i++) {
         if (counter[i] != 9) {
-            std::cout << "Each color must be added exactly 9 times" << std::endl;
+            solution = "*Each color must be added exactly 9 times*";
             cube = CUBE;
             isSolved = true;
         }
@@ -28,7 +28,7 @@ Cube::Cube(std::string cube) {
     }
     for (int i = 0; i < 5 && !isSolved; i++) {
         if (counter[i] != 1) {
-            std::cout << "Each color must be used exacly 1 time as a center field" << std::endl;
+            solution = "*Each color must be used exacly 1 time as a center field*";
             cube = CUBE;
             isSolved = true;
         }
