@@ -79,6 +79,25 @@ void Cube::replace(const std::string& s1, const std::string& s2) {
     }
 }
 
+void Cube::optimize() {
+    std::string a[] = {"U", "F", "L", "R", "B"};
+
+    for (int i = 0; i < 3; i++) {
+        for (auto & k : a) {
+            replace(k + " " + k + " " + k + " ", k + "i ");
+            replace(k + " " + k + "i ", "");
+            replace(k + "i " + k + " ", "");
+            replace(k + "i " + k + "i ", k + "2 ");
+            replace(k + " " + k + " ", k + "2 ");
+            replace(k + "2 " + k + " ", "");
+            replace(k + " " + k + "2 ", "");
+            replace(k + "2 " + k + "i ", k + "");
+            replace(k + "i " + k + "2 ", k + "");
+        }
+    }
+}
+
+// solve from given state to solved cube
 std::string Cube::solve() {
     if (!solution.empty()) return solution;
 
@@ -119,41 +138,7 @@ std::string Cube::solve() {
         return solution;
     }
 
-    replace("U U U ", "Ui ");
-    replace("U Ui ", "");
-    replace("Ui U ", "");
-    replace("Ui Ui ", "U2 ");
-    replace("U U ", "U2 ");
-
-    replace("F F F ", "Fi ");
-    replace("F Fi ", "");
-    replace("Fi F ", "");
-    replace("Fi Fi ", "F2 ");
-    replace("F F ", "F2 ");
-
-    replace("L L L ", "Li ");
-    replace("L Li ", "");
-    replace("Li L ", "");
-    replace("Li Li ", "L2 ");
-    replace("L L ", "L2 ");
-
-    replace("R R R ", "Ri ");
-    replace("R Ri ", "");
-    replace("Ri R ", "");
-    replace("Ri Ri ", "R2 ");
-    replace("R R ", "R2 ");
-
-    replace("B B B ", "Bi ");
-    replace("B Bi ", "");
-    replace("Bi B ", "");
-    replace("Bi Bi ", "B2 ");
-    replace("B B ", "B2 ");
-
-//    replace("D D D ", "Di ");
-//    replace("D Di ", "");
-//    replace("Di D ", "");
-//    replace("Di Di ", "D2 ");
-//    replace("D D ", "D2 ");
+    optimize();
 
     int k = 0;
     for (char & c : solution) {
@@ -167,35 +152,46 @@ std::string Cube::solve() {
     return solution;
 }
 
-std::string * Cube::solveToArray() {
-    solve();
+// solve from solved cube to given state
+std::string Cube::reverseSolve() {
+    if (!reverseSolution.empty()) return reverseSolution;
+
+    if (solution.empty()) solve();
 
     if (solution[0] == '*') {
-        auto *array = new std::string[2];
-        array[0] = solution;
-        array[1] = "0";
-        return array;
+        reverseSolution = solution;
+        return reverseSolution;
     }
 
     std::vector<std::string> v;
-
     int k = 0;
     for (int i = 0; i < solution.size(); i++) {
-        if (solution[i] == ' ') {
+        if (solution[i] == ' ' || solution[i] == '\n') {
             v.push_back(solution.substr(k, i - k));
             k = i + 1;
         }
     }
 
-    auto *array = new std::string[v.size() + 1];
-    if (!array) return nullptr;
-
-    for (int i = 0; i < v.size(); i++) {
-        array[i] = v[i];
+    for (int i = v.size() - 1; i >= 0; i--) {
+        std::string s = v[i];
+        if (s.size() == 1) reverseSolution.append(s + "i ");
+        else if (s[1] == '2') reverseSolution.append(s + " ");
+        else {
+            s = s.substr(0, 1) + " ";
+            reverseSolution.append(s);
+        }
     }
-    array[v.size()] = "0";
 
-    return array;
+    k = 0;
+    for (char & c : reverseSolution) {
+        if (c == ' ') k++;
+        if (k == 20) {
+            c = '\n';
+            k = 0;
+        }
+    }
+
+    return reverseSolution;
 }
 
 void Cube::print() {

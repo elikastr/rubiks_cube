@@ -16,13 +16,15 @@ public:
     void print();
 
     std::string solve();
-    std::string* solveToArray();
+    std::string reverseSolve();
 
 private:
     std::string solution;
+    std::string reverseSolution;
 
     static void count(char v, int counter[]);
     void replace(const std::string& s1, const std::string& s2);
+    void optimize();
 
     static void rotate(std::string &face);
 
