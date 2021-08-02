@@ -89,8 +89,8 @@ void Cube::optimize() {
             replace(k + "i " + k + " ", "");
             replace(k + "i " + k + "i ", k + "2 ");
             replace(k + " " + k + " ", k + "2 ");
-            replace(k + "2 " + k + " ", "");
-            replace(k + " " + k + "2 ", "");
+            replace(k + "2 " + k + " ", k + "i ");
+            replace(k + " " + k + "2 ", k + "i ");
             replace(k + "2 " + k + "i ", k + "");
             replace(k + "i " + k + "2 ", k + "");
         }
