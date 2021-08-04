@@ -1100,7 +1100,7 @@ void Cube::topCorners() {
 
     // position corners
     if (front[0] == back[2] && front[2] == back[0] && left[0] == right[2] && left[2] == right[0]) {
-        F(); R(); Ui(); Ri(); Ui(); R(); U(); Ri(); Fi(); R(); U(); Ri(); Ui(); Ri(); F(); R(); Fi();
+        Ri(); U(); Li(); U(); U(); R(); Ui(); L(); Ri(); U(); Li(); U(); U(); R(); Ui(); L();
     }
     else {
         k = 0;
@@ -1114,7 +1114,7 @@ void Cube::topCorners() {
             U();
         }
 
-        if (front[2] == back[0]) {
+        if (front[2] == back[0] && front[0] == right[2] && right[0] == back[2]) {
             R(); U(); Ri(); Ui(); Ri(); F(); R(); R(); Ui(); Ri(); Ui(); R(); U(); Ri(); Fi();
         }
         else {
@@ -1131,40 +1131,37 @@ void Cube::topEdges() {
     }
 
     int k = 0;
-    int i = 0;
-    while (front[0] != front[1] || right[0] != right[1] || back[0] != back[1] || left[0] != left[1]) {
-        k++;
-        if (k == MAX) {
-            solution = "*";
-            return;
-        }
-
-        i = 0;
+    if (front[0] != front[1] || right[0] != right[1] || back[0] != back[1] || left[0] != left[1]) {
         while (back[0] != back[1]) {
-            i++;
-            if (i == MAX) {
+            k++;
+            if (k == 4) {
                 solution = "*";
                 return;
             }
 
             U();
         }
-        if (front[1] == left[0]) {
+
+        if (left[1] == front[0] && front[1] == right[0] && right[1] == left[0]) {
+            R(); Ui(); R(); U(); R(); U(); R(); Ui(); Ri(); Ui(); R(); R();
+        }
+        else if (left[1] == right[0] && right[1] == front[0] && front[1] == left[0]) {
             R(); R(); U(); R(); U(); Ri(); Ui(); Ri(); Ui(); Ri(); U(); Ri();
         }
         else {
-            R(); Ui(); R(); U(); R(); U(); R(); Ui(); Ri(); Ui(); R(); R();
+            solution = "*";
+            return;
         }
     }
 
-    i = 0;
-    while (front[1] != front[4]) {
-        i++;
-        if (i == MAX) {
+    k = 0;
+    while (front[0] != front[4] || right[0] != right[4] || back[0] != back[4] || left[0] != left[4]) {
+        k++;
+        if (k == 4) {
             solution = "*";
             return;
         }
 
         U();
     }
-} // to optimize
+}
