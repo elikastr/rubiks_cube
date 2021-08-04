@@ -1026,87 +1026,105 @@ void Cube::topCorners() {
     if (up[8] == c) corners++;
 
     int k = 0;
-    int i = 0;
-    while (corners != 4) {
-        k++;
-        if (k == MAX) {
-            solution = "*";
-            return;
-        }
-
-        if (corners == 0) {
-            i = 0;
-            while (left[2] != c) {
-                i++;
-                if (i == MAX) {
-                    solution = "*";
-                    return;
-                }
-
-                U();
-            }
-        }
-        else if (corners == 1) {
-            i = 0;
-            while (up[6] != c) {
-                i++;
-                if (i == MAX) {
-                    solution = "*";
-                    return;
-                }
-
-                U();
-            }
-        }
-        else if (corners == 2) {
-            i = 0;
-            while (front[0] != c) {
-                i++;
-                if (i == MAX) {
-                    solution = "*";
-                    return;
-                }
-
-                U();
-            }
-        }
-
-        R(); U(); Ri(); U(); R(); U(); U(); Ri();
-
-        corners = 0;
-        if (up[0] == c) corners++;
-        if (up[2] == c) corners++;
-        if (up[6] == c) corners++;
-        if (up[8] == c) corners++;
-    }
-
-    // position corners
-    if (left[0] != left[2] && front[0] != front[2] && right[0] != right[2] && back[0] != back[2]) {
-        Ri(); U(); Li(); U(); U(); R(); Ui(); L(); Ri(); U(); Li(); U(); U(); R(); Ui(); L();
-    }
-
-    k = 0;
-    while (left[0] != left[2] || front[0] != front[2] || right[0] != right[2] || back[0] != back[2]) {
-        k++;
-        if (k == MAX) {
-            solution = "*";
-            return;
-        }
-
-        i = 0;
-        while (left[0] != left[2]) {
-            i++;
-            if (i == MAX) {
+    if (corners == 0) {
+        while (left[0] != c || left[2] != c) {
+            k++;
+            if (k == MAX) {
                 solution = "*";
                 return;
             }
 
             U();
         }
-        R(); U(); Ri(); Ui(); Ri(); F(); R(); R(); Ui(); Ri(); Ui(); R(); U(); Ri(); Fi();
+
+        if (right[0] == c && right[2] == c) {
+            R(); U(); Ri(); U(); R(); Ui(); Ri(); U(); R(); U(); U(); Ri();
+        }
+        else if (front[2] == c && back[0] == c) {
+            R(); U(); U(); R(); R(); Ui(); R(); R(); Ui(); R(); R(); U(); U(); R();
+        }
+        else {
+            solution = "*";
+            return;
+        }
+    }
+
+    else if (corners == 1) {
+        while (up[2] != c) U();
+        if (left[0] == c && front[0] == c && right[0] == c) {
+            R(); U(); U(); Ri(); Ui(); R(); Ui(); Ri();
+        }
+        else {
+            while (up[6] != c) U();
+            if (front[2] == c && right[2] == c && back[2] == c) {
+                R(); U(); Ri(); U(); R(); U(); U(); Ri();
+            }
+            else {
+                solution = "*";
+                return;
+            }
+        }
+    }
+
+    else if (corners == 2) {
+        k = 0;
+        while (front[0] != c) {
+            k++;
+            if (k == MAX) {
+                solution = "*";
+                return;
+            }
+
+            U();
+        }
+
+        if (up[0] == c && up[8] == c && right[2] == c) {
+            F(); Ri(); Fi(); L(); F(); R(); Fi(); Li();
+        }
+        else if (up[2] == c && up[8] == c && back[2] == c) {
+            L(); F(); Ri(); Fi(); Li(); F(); R(); Fi();
+        }
+        else if (up[0] == c && up[2] == c && front[2] == c) {
+            R(); R(); D(); Ri(); U(); U(); R(); Di(); Ri(); U(); U(); Ri();
+        }
+        else {
+            solution = "*";
+            return;
+        }
+    }
+
+    else if (corners == 3) {
+        solution = "*";
+        return;
+    }
+
+    // position corners
+    if (front[0] == back[2] && front[2] == back[0] && left[0] == right[2] && left[2] == right[0]) {
+        F(); R(); Ui(); Ri(); Ui(); R(); U(); Ri(); Fi(); R(); U(); Ri(); Ui(); Ri(); F(); R(); Fi();
+    }
+    else {
+        k = 0;
+        while (left[0] != left[2]) {
+            k++;
+            if (k == 4) {
+                solution = "*";
+                return;
+            }
+
+            U();
+        }
+
+        if (front[2] == back[0]) {
+            R(); U(); Ri(); Ui(); Ri(); F(); R(); R(); Ui(); Ri(); Ui(); R(); U(); Ri(); Fi();
+        }
+        else {
+            solution = "*";
+            return;
+        }
     }
 }
 
+// solve top edges
 void Cube::topEdges() {
     if (front[0] != front[1] && right[0] != right[1] && back[0] != back[1] && left[0] != left[1]) {
         R(); Ui(); R(); U(); R(); U(); R(); Ui(); Ri(); Ui(); R(); R();
