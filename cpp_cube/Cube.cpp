@@ -878,7 +878,7 @@ void Cube::bottomCorners() {
             L(); U(); U(); Li(); Ui(); L(); U(); Li();
         }
     }
-}
+} // to optimize
 
 // solve middle edges
 void Cube::middleEdges() {
@@ -990,7 +990,7 @@ void Cube::middleEdges() {
             Ui(); L(); Ui(); Li(); Ui(); Bi(); U(); B();
         }
     }
-}
+} // to optimize
 
 // solve top cross
 void Cube::topCross() {
@@ -1012,7 +1012,7 @@ void Cube::topCross() {
 
         F(); R(); U(); Ri(); Ui(); Fi();
     }
-}
+} // to optimize
 
 // solve top corners
 void Cube::topCorners() {
@@ -1029,7 +1029,7 @@ void Cube::topCorners() {
     if (corners == 0) {
         while (left[0] != c || left[2] != c) {
             k++;
-            if (k == MAX) {
+            if (k == 4) {
                 solution = "*";
                 return;
             }
@@ -1070,7 +1070,7 @@ void Cube::topCorners() {
         k = 0;
         while (front[0] != c) {
             k++;
-            if (k == MAX) {
+            if (k == 4) {
                 solution = "*";
                 return;
             }
@@ -1167,4 +1167,4 @@ void Cube::topEdges() {
 
         U();
     }
-}
+} // to optimize
