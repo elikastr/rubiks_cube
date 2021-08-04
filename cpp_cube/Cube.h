@@ -38,12 +38,17 @@ private:
     void Ri();
     void B(int i = 1);
     void Bi();
-//    void D(int i = 1);
-//    void Di();
+    void D(int i = 1);
+    void Di();
 
     bool isEdgeUp(char c1, char c2);
+    bool isEdgeDown(char c1, char c2);
     bool isCornerUp(char c1, char c2, char c3);
-    bool isCrossReady();
+
+    void frontBottom();
+    void rightBottom();
+    void leftBottom();
+    void backBottom();
 
     void bottomCross();
     void bottomCorners();

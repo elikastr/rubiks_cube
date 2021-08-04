@@ -28,7 +28,7 @@ Cube::Cube(std::string cube) {
     }
     for (int i = 0; i < 5 && !isSolved; i++) {
         if (counter[i] != 1) {
-            solution = "*Each color must be used exacly 1 time as a center field*";
+            solution = "*Each color must be used exactly 1 time as a center field*";
             cube = CUBE;
             isSolved = true;
         }
@@ -80,7 +80,7 @@ void Cube::replace(const std::string& s1, const std::string& s2) {
 }
 
 void Cube::optimize() {
-    std::string a[] = {"U", "F", "L", "R", "B"};
+    std::string a[] = {"U", "F", "L", "R", "B", "D"};
 
     for (int i = 0; i < 3; i++) {
         for (auto & k : a) {
@@ -172,7 +172,7 @@ std::string Cube::reverseSolve() {
         }
     }
 
-    for (int i = v.size() - 1; i >= 0; i--) {
+    for (int i = int(v.size()) - 1; i >= 0; i--) {
         std::string s = v[i];
         if (s.size() == 1) reverseSolution.append(s + "i ");
         else if (s[1] == '2') reverseSolution.append(s + " ");
@@ -408,8 +408,6 @@ void Cube::Bi() {
     solution.append("Bi ");
 }
 
-// rotations of down face are not used in this algorithm, but we keep them just in case
-/***
 // rotate down face clockwise
 void Cube::D(int i) {
     rotate(down);
@@ -443,7 +441,6 @@ void Cube::Di() {
 
     solution.append("Di ");
 }
-***/
 
 // check if a given edge is at the top layer (permuted correctly)
 bool Cube::isEdgeUp(const char c1, const char c2) {
@@ -451,6 +448,15 @@ bool Cube::isEdgeUp(const char c1, const char c2) {
     if (up[3] == c1 && left[1] == c2) return true;
     if (up[5] == c1 && right[1] == c2) return true;
     if (up[7] == c1 && front[1] == c2) return true;
+    return false;
+}
+
+// check if a given edge is at the bottom layer (permuted correctly)
+bool Cube::isEdgeDown(char c1, char c2) {
+    if (down[1] == c1 && front[7] == c2) return true;
+    if (down[3] == c1 && left[7] == c2) return true;
+    if (down[5] == c1 && right[7] == c2) return true;
+    if (down[7] == c1 && back[7] == c2) return true;
     return false;
 }
 
@@ -487,319 +493,223 @@ bool Cube::isCornerUp(const char c1, const char c2, const char c3) {
     return false;
 }
 
-// check if the bottom edges are in the correct position to continue the algorithm
-bool Cube::isCrossReady() {
+// solve the front bottom edge
+void Cube::frontBottom() {
     char c1 = down[4];
     char c2 = front[4];
-    if ((front[7] != c2 || down[1] != c1) && !isEdgeUp(c1, c2)) return false;
 
-    c2 = right[4];
-    if ((right[7] != c2 || down[5] != c1) && !isEdgeUp(c1, c2)) return false;
+    if (isEdgeDown(c1, c2)) {
+        while (down[1] != c1 || front[7] != c2) D();
+    }
+    else if (isEdgeDown(c2, c1)) {
+        while (right[7] != c1 || down[5] != c2) D();
+        R(); F();
+    }
 
-    c2 = left[4];
-    if ((left[7] != c2 || down[3] != c1) && !isEdgeUp(c1, c2)) return false;
+    else if (isEdgeUp(c1, c2)) {
+        while (up[7] != c1 || front[1] != c2) U();
+        F(); F();
+    }
+    else if (isEdgeUp(c2, c1)) {
+        while (right[1] != c1 || up[5] != c2) U();
+        Ri(); F();
+    }
 
-    c2 = back[4];
-    if ((back[7] != c2 || down[7] != c1) && !isEdgeUp(c1, c2)) return false;
+    else if (right[3] == c1 && front[5] == c2) F();
+    else if (right[3] == c2 && front[5] == c1) {
+        Ri(); Di();
+    }
 
-    return true;
+    else if (left[5] == c1 && front[3] == c2) Fi();
+    else if (left[5] == c2 && front[3] == c1) {
+        L(); D();
+    }
+
+    else if (right[5] == c1 && back[3] == c2) {
+        Bi(); D(); D();
+    }
+    else if (right[5] == c2 && back[3] == c1) {
+        R(); Di();
+    }
+
+    else if (left[3] == c1 && back[5] == c2) {
+        B(); D(); D();
+    }
+    else if (left[3] == c2 && back[5] == c1) {
+        Li(); D();
+    }
+
+    else solution = "*";
+}
+
+// solve the right bottom edge
+void Cube::rightBottom() {
+    char c1 = down[4];
+    char c2 = right[4];
+
+    if (down[5] == c1 && right[7] == c2) return;
+    else if (down[5] == c2 && right[7] == c1) {
+        R(); Di(); F(); D();
+    }
+
+    else if (down[3] == c1 && left[7] == c2) {
+        L(); L(); U(); U(); R(); R();
+    }
+    else if (down[3] == c2 && left[7] == c1) {
+        Li(); Di(); Fi(); D();
+    }
+
+    else if (down[7] == c1 && back[7] == c2) {
+        F(); Di(); Fi();
+    }
+    else if (down[7] == c2 && back[7] == c1) {
+        B(); R();
+    }
+
+    else if (isEdgeUp(c1, c2)) {
+        while (up[5] != c1 || right[1] != c2) U();
+        R(); R();
+    }
+    else if (isEdgeUp(c2, c1)) {
+        while (back[1] != c1 || up[1] != c2) U();
+        Bi(); R();
+    }
+
+    else if (front[5] == c1 && right[3] == c2) Ri();
+    else if (front[5] == c2 && right[3] == c1) {
+        Di(); F(); D();
+    }
+
+    else if (front[3] == c1 && left[5] == c2) {
+        Li(); U(); U(); R(); R();
+    }
+    else if (front[3] == c2 && left[5] == c1) {
+        Di(); Fi(); D();
+    }
+
+    else if (back[3] == c1 && right[5] == c2) R();
+    else if (back[3] == c2 && right[5] == c1) {
+        D(); Bi(); Di();
+    }
+
+    else if (back[5] == c1 && left[3] == c2) {
+        L(); U(); U(); R(); R();
+    }
+    else if (back[5] == c2 && left[3] == c1) {
+        D(); B(); Di();
+    }
+
+    else solution = "*";
+}
+
+// solve the left bottom edge
+void Cube::leftBottom() {
+    char c1 = down[4];
+    char c2 = left[4];
+
+    if (down[3] == c1 && left[7] == c2) return;
+    else if (down[3] == c2 && left[7] == c1) {
+        Li(); D(); Fi(); Di();
+    }
+
+    else if (down[7] == c1 && back[7] == c2) {
+        B(); B(); Ui(); L(); L();
+    }
+    else if (down[7] == c2 && back[7] == c1) {
+        Bi(); Li();
+    }
+
+    else if (isEdgeUp(c1, c2)) {
+        while (up[3] != c1 || left[1] != c2) U();
+        L(); L();
+    }
+    else if (isEdgeUp(c2, c1)) {
+        while (back[1] != c1 || up[1] != c2) U();
+        B(); Li();
+    }
+
+    else if (front[3] == c1 && left[5] == c2) L();
+    else if (front[3] == c2 && left[5] == c1) {
+        D(); Fi(); Di();
+    }
+
+    else if (front[5] == c1 && right[3] == c2) {
+        D(); D(); Ri(); D(); D();
+    }
+    else if (front[5] == c2 && right[3] == c1) {
+        D(); F(); Di();
+    }
+
+    else if (back[5] == c1 && left[3] == c2) Li();
+    else if (back[5] == c2 && left[3] == c1) {
+        Di(); B(); D();
+    }
+
+    else if (back[3] == c1 && right[5] == c2) {
+        D(); D(); R(); D(); D();
+    }
+    else if (back[3] == c2 && right[5] == c1) {
+        Di(); Bi(); D();
+    }
+
+    else solution = "*";
+}
+
+// solve the back bottom edge
+void Cube::backBottom() {
+    char c1 = down[4];
+    char c2 = back[4];
+
+    if (down[7] == c1 && back[7] == c2) return;
+    else if (down[7] == c2 && back[7] == c1) {
+        Bi(); D(); Li(); Di();
+    }
+
+    else if (isEdgeUp(c1, c2)) {
+        while (up[1] != c1 || back[1] != c2) U();
+        B(); B();
+    }
+    else if (isEdgeUp(c2, c1)) {
+        while (right[1] != c1 || up[5] != c2) U();
+        R(); Bi(); Ri();
+    }
+
+    else if (right[5] == c1 && back[3] == c2) Bi();
+    else if (right[5] == c2 && back[3] == c1) {
+        Di(); R(); D();
+    }
+
+    else if (left[3] == c1 && back[5] == c2) B();
+    else if (left[3] == c2 && back[5] == c1) {
+        D(); Li(); Di();
+    }
+
+    else if (right[3] == c1 && front[5] == c2) {
+        D(); D(); F(); D(); D();
+    }
+    else if (right[3] == c2 && front[5] == c1) {
+        Di(); Ri(); D();
+    }
+
+    else if (left[5] == c1 && front[3] == c2) {
+        D(); D(); Fi(); D(); D();
+    }
+    else if (left[5] == c2 && front[3] == c1) {
+        D(); L(); Di();
+    }
+
+    else solution = "*";
 }
 
 // solve bottom cross
 void Cube::bottomCross() {
-    char c = down[4];
-
-    int k = 0;
-    int i = 0;
-    while (!isCrossReady()) {
-        k++;
-        if (k == MAX) {
-            solution = "*";
-            return;
-        }
-
-        // bring incorrect edges to the top layer
-        if (front[1] == c) {
-            F(); Ui(); R(); U();
-        }
-        if (right[1] == c) {
-            R(); Ui(); B(); U();
-        }
-        if (back[1] == c) {
-            B(); Ui(); L(); U();
-        }
-        if (left[1] == c) {
-            L(); Ui(); F(); U();
-        }
-
-        if (front[3] == c) {
-            i = 0;
-            while (up[3] == c) {
-                i++;
-                if (i == MAX) {
-                    solution = "*";
-                    return;
-                }
-
-                U();
-            }
-            Li();
-        }
-        if (front[5] == c) {
-            i = 0;
-            while (up[5] == c) {
-                i++;
-                if (i == MAX) {
-                    solution = "*";
-                    return;
-                }
-
-                U();
-            }
-            R();
-        }
-        if (right[3] == c) {
-            i = 0;
-            while (up[7] == c) {
-                i++;
-                if (i == MAX) {
-                    solution = "*";
-                    return;
-                }
-
-                U();
-            }
-            Fi();
-        }
-        if (right[5] == c) {
-            i = 0;
-            while (up[1] == c) {
-                i++;
-                if (i == MAX) {
-                    solution = "*";
-                    return;
-                }
-
-                U();
-            }
-            B();
-        }
-        if (left[3] == c) {
-            i = 0;
-            while (up[1] == c) {
-                i++;
-                if (i == MAX) {
-                    solution = "*";
-                    return;
-                }
-
-                U();
-            }
-            Bi();
-        }
-        if (left[5] == c) {
-            i = 0;
-            while (up[7] == c) {
-                i++;
-                if (i == MAX) {
-                    solution = "*";
-                    return;
-                }
-
-                U();
-            }
-            F();
-        }
-        if (back[3] == c) {
-            i = 0;
-            while (up[5] == c) {
-                i++;
-                if (i == MAX) {
-                    solution = "*";
-                    return;
-                }
-
-                U();
-            }
-            Ri();
-        }
-        if (back[5] == c) {
-            i = 0;
-            while (up[3] == c) {
-                i++;
-                if (i == MAX) {
-                    solution = "*";
-                    return;
-                }
-
-                U();
-            }
-            L();
-        }
-
-        if (front[7] == c) {
-            i = 0;
-            while (up[7] == c) {
-                i++;
-                if (i == MAX) {
-                    solution = "*";
-                    return;
-                }
-
-                U();
-            }
-            Fi(); Ui(); R();
-        }
-        if (right[7] == c) {
-            i = 0;
-            while (up[5] == c) {
-                i++;
-                if (i == MAX) {
-                    solution = "*";
-                    return;
-                }
-
-                U();
-            }
-            Ri(); Ui(); B();
-        }
-        if (left[7] == c) {
-            i = 0;
-            while (up[3] == c) {
-                i++;
-                if (i == MAX) {
-                    solution = "*";
-                    return;
-                }
-
-                U();
-            }
-            Li(); Ui(); F();
-        }
-        if (back[7] == c) {
-            i = 0;
-            while (up[1] == c) {
-                i++;
-                if (i == MAX) {
-                    solution = "*";
-                    return;
-                }
-
-                U();
-            }
-            Bi(); Ui(); L();
-        }
-
-        if (down[1] == c && front[7] != front[4]) {
-            i = 0;
-            while (up[7] == c) {
-                i++;
-                if (i == MAX) {
-                    solution = "*";
-                    return;
-                }
-
-                U();
-            }
-            F(); F();
-        }
-        if (down[3] == c && left[7] != left[4]) {
-            i = 0;
-            while (up[3] == c) {
-                i++;
-                if (i == MAX) {
-                    solution = "*";
-                    return;
-                }
-
-                U();
-            }
-            L(); L();
-        }
-        if (down[5] == c && right[7] != right[4]) {
-            i = 0;
-            while (up[5] == c) {
-                i++;
-                if (i == MAX) {
-                    solution = "*";
-                    return;
-                }
-
-                U();
-            }
-            R(); R();
-        }
-        if (down[7] == c && back[7] != back[4]) {
-            i = 0;
-            while (up[1] == c) {
-                i++;
-                if (i == MAX) {
-                    solution = "*";
-                    return;
-                }
-
-                U();
-            }
-            B(); B();
-        }
-    }
-
-    // bring down the corners
-    if (front[7] != front[4] || down[1] != c) {
-        i = 0;
-        while (front[1] != front[4] || up[7] != c) {
-            i++;
-            if (i == MAX) {
-                solution = "*";
-                return;
-            }
-
-            U();
-        }
-        F(); F();
-    }
-
-    if (right[7] != right[4] || down[5] != c) {
-        i = 0;
-        while (right[1] != right[4] || up[5] != c) {
-            i++;
-            if (i == MAX) {
-                solution = "*";
-                return;
-            }
-
-            U();
-        }
-        R(); R();
-    }
-
-    if (left[7] != left[4] || down[3] != c) {
-        i = 0;
-        while (left[1] != left[4] || up[3] != c) {
-            i++;
-            if (i == MAX) {
-                solution = "*";
-                return;
-            }
-
-            U();
-        }
-        L(); L();
-    }
-
-    if (back[7] != back[4] || down[7] != c) {
-        i = 0;
-        while (back[1] != back[4] || up[1] != c) {
-            i++;
-            if (i == MAX) {
-                solution = "*";
-                return;
-            }
-
-            U();
-        }
-        B(); B();
-    }
+    frontBottom();
+    if (solution == "*") return;
+    rightBottom();
+    if (solution == "*") return;
+    leftBottom();
+    if (solution == "*") return;
+    backBottom();
 }
 
 // solve bottom corners
