@@ -1099,6 +1099,8 @@ void Cube::topCorners() {
     }
 
     // position corners
+    if (front[0] == front[2] && right[0] == right[2] && left[0] == left[2] && back[0] == back[2]) return;
+
     if (front[0] == back[2] && front[2] == back[0] && left[0] == right[2] && left[2] == right[0]) {
         Ri(); U(); Li(); U(); U(); R(); Ui(); L(); Ri(); U(); Li(); U(); U(); R(); Ui(); L();
     }
