@@ -999,7 +999,7 @@ void Cube::topCross() {
     int k = 0;
     while (up[1] != c || up[3] != c || up[5] != c || up[7] != c) {
         k++;
-        if (k == MAX) {
+        if (k == 4) {
             solution = "*";
             return;
         }
@@ -1012,7 +1012,7 @@ void Cube::topCross() {
 
         F(); R(); U(); Ri(); Ui(); Fi();
     }
-} // to optimize
+} 
 
 // solve top corners
 void Cube::topCorners() {
