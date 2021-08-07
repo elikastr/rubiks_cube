@@ -5,7 +5,6 @@
 #include <string>
 
 #define CUBE "wwwwwwwwwgggggggggrrrrrrrrrbbbbbbbbboooooooooyyyyyyyyy"
-#define MAX 50
 
 class Cube {
 public:

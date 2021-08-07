@@ -723,7 +723,7 @@ void Cube::bottomCorners() {
         i = 0;
         while (up[8] == c || front[2] == c || right[0] == c) {
             i++;
-            if (i == MAX) {
+            if (i == 4) {
                 solution = "*";
                 return;
             }
@@ -736,7 +736,7 @@ void Cube::bottomCorners() {
         i = 0;
         while (up[6] == c || front[0] == c || left[2] == c) {
             i++;
-            if (i == MAX) {
+            if (i == 4) {
                 solution = "*";
                 return;
             }
@@ -749,7 +749,7 @@ void Cube::bottomCorners() {
         i = 0;
         while (up[2] == c || right[2] == c || back[0] == c) {
             i++;
-            if (i == MAX) {
+            if (i == 4) {
                 solution = "*";
                 return;
             }
@@ -762,7 +762,7 @@ void Cube::bottomCorners() {
         i = 0;
         while (up[0] == c || left[0] == c || back[2] == c) {
             i++;
-            if (i == MAX) {
+            if (i == 4) {
                 solution = "*";
                 return;
             }
@@ -781,7 +781,7 @@ void Cube::bottomCorners() {
                || (front[2] != c && front[2] != c1 && front[2] != c2)
                || (right[0] != c && right[0] != c1 && right[0] != c2)) {
             i++;
-            if (i == MAX) {
+            if (i == 4) {
                 solution = "*";
                 return;
             }
@@ -807,7 +807,7 @@ void Cube::bottomCorners() {
                || (front[0] != c && front[0] != c1 && front[0] != c2)
                || (left[2] != c && left[2] != c1 && left[2] != c2)) {
             i++;
-            if (i == MAX) {
+            if (i == 4) {
                 solution = "*";
                 return;
             }
@@ -834,7 +834,7 @@ void Cube::bottomCorners() {
                || (back[0] != c && back[0] != c1 && back[0] != c2)
                || (right[2] != c && right[2] != c1 && right[2] != c2)) {
             i++;
-            if (i == MAX) {
+            if (i == 4) {
                 solution = "*";
                 return;
             }
@@ -860,7 +860,7 @@ void Cube::bottomCorners() {
                || (back[2] != c && back[2] != c1 && back[2] != c2)
                || (left[0] != c && left[0] != c1 && left[0] != c2)) {
             i++;
-            if (i == MAX) {
+            if (i == 4) {
                 solution = "*";
                 return;
             }
@@ -878,7 +878,7 @@ void Cube::bottomCorners() {
             L(); U(); U(); Li(); Ui(); L(); U(); Li();
         }
     }
-} // to optimize
+}
 
 // solve middle edges
 void Cube::middleEdges() {
@@ -891,7 +891,7 @@ void Cube::middleEdges() {
         i = 0;
         while (up[7] != c && front[1] != c) {
             i++;
-            if (i == MAX) {
+            if (i == 4) {
                 solution = "*";
                 return;
             }
@@ -904,7 +904,7 @@ void Cube::middleEdges() {
         i = 0;
         while (up[7] != c && front[1] != c) {
             i++;
-            if (i == MAX) {
+            if (i == 4) {
                 solution = "*";
                 return;
             }
@@ -917,7 +917,7 @@ void Cube::middleEdges() {
         i = 0;
         while (up[1] != c && back[1] != c) {
             i++;
-            if (i == MAX) {
+            if (i == 4) {
                 solution = "*";
                 return;
             }
@@ -930,7 +930,7 @@ void Cube::middleEdges() {
         i = 0;
         while (up[1] != c && back[1] != c) {
             i++;
-            if (i == MAX) {
+            if (i == 4) {
                 solution = "*";
                 return;
             }
@@ -948,10 +948,10 @@ void Cube::middleEdges() {
     if (isEdgeUp(back[4], right[4]) || isEdgeUp(right[4], back[4])) k++;
 
     for (int j = 0; j < k; j++) {
-        int m = 0;
+        i = 0;
         while (up[7] == c || front[1] == c) {
-            m++;
-            if (m == MAX) {
+            i++;
+            if (i == 4) {
                 solution = "*";
                 return;
             }
@@ -990,7 +990,7 @@ void Cube::middleEdges() {
             Ui(); L(); Ui(); Li(); Ui(); Bi(); U(); B();
         }
     }
-} // to optimize
+}
 
 // solve top cross
 void Cube::topCross() {
